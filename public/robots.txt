@@ -1,0 +1,39 @@
+User-agent: *
+Allow: /
+Allow: /pdf-merge
+Allow: /pdf-split
+Allow: /pdf-extract-pages
+Allow: /pdf-delete-pages
+Allow: /pdf-rotate
+Allow: /jpg-to-pdf
+Allow: /pdf-to-jpg
+Allow: /about
+Allow: /privacy
+Allow: /terms
+Allow: /contact
+Allow: /blog
+Allow: /blog/*
+
+# English Routes
+Allow: /en
+Allow: /en/pdf-merge
+Allow: /en/pdf-split
+Allow: /en/pdf-extract-pages
+Allow: /en/pdf-delete-pages
+Allow: /en/pdf-rotate
+Allow: /en/jpg-to-pdf
+Allow: /en/pdf-to-jpg
+Allow: /en/about
+Allow: /en/privacy
+Allow: /en/terms
+Allow: /en/contact
+Allow: /en/blog
+Allow: /en/blog/*
+
+# Disallow any test, admin or dev paths
+Disallow: /dev/
+Disallow: /test/
+Disallow: /admin/
+Disallow: /404
+
+Sitemap: https://pdfflow.com/sitemap.xml
