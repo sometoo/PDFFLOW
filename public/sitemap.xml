@@ -2,194 +2,194 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <!-- Korean Pages -->
     <url>
-        <loc>https://pdfflow.com/</loc>
+        <loc>https://www.pdfflow.xyz/</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/about</loc>
+        <loc>https://www.pdfflow.xyz/about</loc>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/privacy</loc>
+        <loc>https://www.pdfflow.xyz/privacy</loc>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/terms</loc>
+        <loc>https://www.pdfflow.xyz/terms</loc>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/contact</loc>
+        <loc>https://www.pdfflow.xyz/contact</loc>
         <changefreq>monthly</changefreq>
         <priority>0.4</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/blog</loc>
+        <loc>https://www.pdfflow.xyz/blog</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/pdf-merge</loc>
+        <loc>https://www.pdfflow.xyz/pdf-merge</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/pdf-split</loc>
+        <loc>https://www.pdfflow.xyz/pdf-split</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/pdf-extract-pages</loc>
+        <loc>https://www.pdfflow.xyz/pdf-extract-pages</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/pdf-delete-pages</loc>
+        <loc>https://www.pdfflow.xyz/pdf-delete-pages</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/pdf-rotate</loc>
+        <loc>https://www.pdfflow.xyz/pdf-rotate</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/jpg-to-pdf</loc>
+        <loc>https://www.pdfflow.xyz/jpg-to-pdf</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/pdf-to-jpg</loc>
+        <loc>https://www.pdfflow.xyz/pdf-to-jpg</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/blog/pdf-merge-vs-split</loc>
+        <loc>https://www.pdfflow.xyz/blog/pdf-merge-vs-split</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/blog/pdf-extract-pages-guide</loc>
+        <loc>https://www.pdfflow.xyz/blog/pdf-extract-pages-guide</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/blog/browser-pdf-privacy</loc>
+        <loc>https://www.pdfflow.xyz/blog/browser-pdf-privacy</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/blog/delete-pdf-pages</loc>
+        <loc>https://www.pdfflow.xyz/blog/delete-pdf-pages</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/blog/jpg-to-pdf-guide</loc>
+        <loc>https://www.pdfflow.xyz/blog/jpg-to-pdf-guide</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/blog/pdf-to-jpg-quality</loc>
+        <loc>https://www.pdfflow.xyz/blog/pdf-to-jpg-quality</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
 
     <!-- English Pages -->
     <url>
-        <loc>https://pdfflow.com/en</loc>
+        <loc>https://www.pdfflow.xyz/en</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/about</loc>
+        <loc>https://www.pdfflow.xyz/en/about</loc>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/privacy</loc>
+        <loc>https://www.pdfflow.xyz/en/privacy</loc>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/terms</loc>
+        <loc>https://www.pdfflow.xyz/en/terms</loc>
         <changefreq>monthly</changefreq>
         <priority>0.3</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/contact</loc>
+        <loc>https://www.pdfflow.xyz/en/contact</loc>
         <changefreq>monthly</changefreq>
         <priority>0.4</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/blog</loc>
+        <loc>https://www.pdfflow.xyz/en/blog</loc>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/pdf-merge</loc>
+        <loc>https://www.pdfflow.xyz/en/pdf-merge</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/pdf-split</loc>
+        <loc>https://www.pdfflow.xyz/en/pdf-split</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/pdf-extract-pages</loc>
+        <loc>https://www.pdfflow.xyz/en/pdf-extract-pages</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/pdf-delete-pages</loc>
+        <loc>https://www.pdfflow.xyz/en/pdf-delete-pages</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/pdf-rotate</loc>
+        <loc>https://www.pdfflow.xyz/en/pdf-rotate</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/jpg-to-pdf</loc>
+        <loc>https://www.pdfflow.xyz/en/jpg-to-pdf</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/pdf-to-jpg</loc>
+        <loc>https://www.pdfflow.xyz/en/pdf-to-jpg</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/blog/merge-vs-split-pdf</loc>
+        <loc>https://www.pdfflow.xyz/en/blog/merge-vs-split-pdf</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/blog/extract-selected-pdf-pages</loc>
+        <loc>https://www.pdfflow.xyz/en/blog/extract-selected-pdf-pages</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/blog/browser-based-pdf-privacy</loc>
+        <loc>https://www.pdfflow.xyz/en/blog/browser-based-pdf-privacy</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/blog/delete-pdf-pages-tips</loc>
+        <loc>https://www.pdfflow.xyz/en/blog/delete-pdf-pages-tips</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/blog/jpg-to-pdf-guide</loc>
+        <loc>https://www.pdfflow.xyz/en/blog/jpg-to-pdf-guide</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://pdfflow.com/en/blog/pdf-to-jpg-quality</loc>
+        <loc>https://www.pdfflow.xyz/en/blog/pdf-to-jpg-quality</loc>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>

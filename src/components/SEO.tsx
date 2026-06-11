@@ -25,7 +25,7 @@ const slugMap: Record<string, string> = {
 };
 
 // Easily configure the actual target domain here (or via .env VITE_SITE_URL variable)
-const SITE_ORIGIN = import.meta.env.VITE_SITE_URL || 'https://pdfflow.com';
+const SITE_ORIGIN = import.meta.env.VITE_SITE_URL || 'https://www.pdfflow.xyz';
 
 const SEO: React.FC<SEOProps> = ({ title, description, canonical, noindex }) => {
   const location = useLocation();

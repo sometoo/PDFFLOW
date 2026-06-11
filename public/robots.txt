@@ -36,4 +36,4 @@ Disallow: /test/
 Disallow: /admin/
 Disallow: /404
 
-Sitemap: https://pdfflow.com/sitemap.xml
+Sitemap: https://www.pdfflow.xyz/sitemap.xml
