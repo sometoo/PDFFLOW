@@ -6,6 +6,7 @@ import About from './pages/About';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Contact from './pages/Contact';
+import EditorialPolicy from './pages/EditorialPolicy';
 import NotFound from './pages/NotFound';
 import BlogList from './pages/blog/BlogList';
 import BlogPost from './pages/blog/BlogPost';
@@ -17,10 +18,9 @@ import RotatePdf from './pages/tools/RotatePdf';
 import JpgToPdf from './pages/tools/JpgToPdf';
 import PdfToJpg from './pages/tools/PdfToJpg';
 
-function App() {
+export function AppRoutes() {
   return (
-    <Router>
-      <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 font-sans antialiased">
+    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900 font-sans antialiased">
         {/* Navigation Bar */}
         <Header />
         
@@ -40,6 +40,7 @@ function App() {
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/editorial-policy" element={<EditorialPolicy />} />
             <Route path="/blog" element={<BlogList />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
 
@@ -56,6 +57,7 @@ function App() {
             <Route path="/en/privacy" element={<Privacy />} />
             <Route path="/en/terms" element={<Terms />} />
             <Route path="/en/contact" element={<Contact />} />
+            <Route path="/en/editorial-policy" element={<EditorialPolicy />} />
             <Route path="/en/blog" element={<BlogList />} />
             <Route path="/en/blog/:slug" element={<BlogPost />} />
 
@@ -66,7 +68,14 @@ function App() {
         
         {/* Footer Links */}
         <Footer />
-      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppRoutes />
     </Router>
   );
 }

@@ -7,6 +7,7 @@ interface SEOProps {
   description: string;
   canonical?: string;
   noindex?: boolean;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const slugMap: Record<string, string> = {
@@ -27,7 +28,7 @@ const slugMap: Record<string, string> = {
 // Easily configure the actual target domain here (or via .env VITE_SITE_URL variable)
 const SITE_ORIGIN = import.meta.env.VITE_SITE_URL || 'https://www.pdfflow.xyz';
 
-const SEO: React.FC<SEOProps> = ({ title, description, canonical, noindex }) => {
+const SEO: React.FC<SEOProps> = ({ title, description, canonical, noindex, structuredData }) => {
   const location = useLocation();
   const origin = SITE_ORIGIN;
   const pathname = location.pathname;
@@ -74,11 +75,28 @@ const SEO: React.FC<SEOProps> = ({ title, description, canonical, noindex }) => 
         <meta name="robots" content="index, follow" />
       )}
       <link rel="canonical" href={canonicalUrl} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={canonicalUrl} />
+      <meta property="og:type" content={pathname.includes('/blog/') ? 'article' : 'website'} />
+      <meta property="og:site_name" content="PDFFlow" />
+      <meta property="og:locale" content={pathname.startsWith('/en') ? 'en_US' : 'ko_KR'} />
+      <meta property="og:image" content={`${origin}/og.png`} />
+      <meta property="og:image:alt" content={pathname.startsWith('/en') ? 'PDFFlow browser-based PDF tools' : '브라우저에서 문서를 처리하는 PDFFlow PDF 도구'} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={`${origin}/og.png`} />
       
       {/* Alternate hreflang tags for SEO indexation mapping */}
       {!noindex && <link rel="alternate" hrefLang="ko" href={koUrl} />}
       {!noindex && <link rel="alternate" hrefLang="en" href={enUrl} />}
       {!noindex && <link rel="alternate" hrefLang="x-default" href={koUrl} />}
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
     </Helmet>
   );
 };

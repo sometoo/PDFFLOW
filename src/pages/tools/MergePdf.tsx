@@ -161,11 +161,11 @@ const MergePdf: React.FC = () => {
     },
     {
       question: 'Will text search or links still work after merging?',
-      answer: 'Yes. This tool does not re-compress or rasterize the PDF pages. It copies the page structure as-is into a new document. Therefore, all text search (Ctrl+F) capabilities and hyperlinks are fully preserved.'
+      answer: 'Ordinary text and vector pages are copied without rasterizing them, so text usually remains searchable. Document-level outlines, forms, signatures, attachments, and some links may not survive; inspect the result before submitting it.'
     },
     {
       question: 'Can I use this tool offline?',
-      answer: 'Yes. Once the PDFFlow webpage is fully loaded, the core merging code runs completely locally inside your browser. You can merge documents and download the output without an active internet connection.'
+      answer: 'The document operation runs in browser memory. Depending on browser caching, the page may continue working after it has loaded, but offline behavior is not guaranteed for every device or session.'
     }
   ] : [
     {

@@ -2,6 +2,23 @@ import React, { useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { slugMap } from './SEO';
 
+const knownStaticPaths = new Set([
+  '/',
+  '/pdf-merge',
+  '/pdf-split',
+  '/pdf-extract-pages',
+  '/pdf-delete-pages',
+  '/pdf-rotate',
+  '/jpg-to-pdf',
+  '/pdf-to-jpg',
+  '/about',
+  '/privacy',
+  '/terms',
+  '/contact',
+  '/editorial-policy',
+  '/blog'
+]);
+
 const Header: React.FC = () => {
   const location = useLocation();
   const pathname = location.pathname;
@@ -21,6 +38,14 @@ const Header: React.FC = () => {
 
   // Calculate target route for language switching
   const getSwitchLangRoute = () => {
+    const languageNeutralPath = pathname.startsWith('/en') ? pathname.substring(3) || '/' : pathname;
+    const blogSlug = languageNeutralPath.startsWith('/blog/') ? languageNeutralPath.substring(6) : '';
+    const isKnownPath = knownStaticPaths.has(languageNeutralPath) || Boolean(blogSlug && slugMap[blogSlug]);
+
+    if (!isKnownPath) {
+      return isEn ? '/' : '/en';
+    }
+
     if (pathname.startsWith('/en/blog/')) {
       const enSlug = pathname.substring(9);
       const koSlug = slugMap[enSlug] || enSlug;

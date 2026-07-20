@@ -19,8 +19,34 @@ const BlogPost: React.FC = () => {
     <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
       <SEO 
         title={`${post.title} - PDFFlow`} 
-        description={post.description} 
+        description={post.description}
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: post.title,
+          description: post.description,
+          datePublished: post.date,
+          dateModified: '2026-07-20',
+          inLanguage: isEn ? 'en' : 'ko',
+          mainEntityOfPage: `https://www.pdfflow.xyz${location.pathname}`,
+          author: {
+            '@type': 'Organization',
+            name: isEn ? 'PDFFlow Editorial Team' : 'PDFFlow 편집팀',
+            url: `https://www.pdfflow.xyz${isEn ? '/en/editorial-policy' : '/editorial-policy'}`
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'PDFFlow',
+            url: 'https://www.pdfflow.xyz/'
+          }
+        }}
       />
+
+      <nav aria-label={isEn ? 'Breadcrumb' : '현재 위치'} className="mb-6 text-xs text-slate-500">
+        <Link to={isEn ? '/en' : '/'} className="hover:text-violet-600">{isEn ? 'Home' : '홈'}</Link>
+        <span className="mx-2">/</span>
+        <Link to={isEn ? '/en/blog' : '/blog'} className="hover:text-violet-600">{isEn ? 'Guides' : '가이드'}</Link>
+      </nav>
 
       {/* Meta Info */}
       <div className="mb-6 flex flex-wrap items-center gap-3 text-xs text-slate-500 justify-center sm:justify-start">
@@ -35,6 +61,15 @@ const BlogPost: React.FC = () => {
       <h1 className="text-3xl font-extrabold text-slate-950 tracking-tight sm:text-4xl text-center sm:text-left mb-6 leading-tight">
         {post.title}
       </h1>
+
+      <div className="mb-8 flex flex-wrap items-center gap-x-3 gap-y-1 border-y border-slate-200 py-3 text-xs text-slate-500">
+        <span>{isEn ? 'Written and reviewed by' : '작성·검토'}</span>
+        <Link to={isEn ? '/en/editorial-policy' : '/editorial-policy'} className="font-semibold text-slate-800 hover:text-violet-600">
+          {isEn ? 'PDFFlow Editorial Team' : 'PDFFlow 편집팀'}
+        </Link>
+        <span aria-hidden="true">•</span>
+        <span>{isEn ? 'Technical review: July 20, 2026' : '기술 검토일: 2026년 7월 20일'}</span>
+      </div>
 
       <div className="prose prose-slate max-w-none text-slate-700 leading-relaxed space-y-6">
         
@@ -111,6 +146,15 @@ const BlogPost: React.FC = () => {
               </Link>
             ))}
           </div>
+        </section>
+
+        <section className="rounded-xl bg-slate-100 p-5 text-sm leading-6 text-slate-600">
+          <h2 className="font-bold text-slate-900">{isEn ? 'About this guide' : '이 가이드의 작성 기준'}</h2>
+          <p className="mt-2">
+            {isEn
+              ? 'This article is maintained against the tools currently available on PDFFlow. Browser and PDF features vary, so preserve the original document and inspect the downloaded result before formal submission.'
+              : '이 글은 현재 PDFFlow에서 제공하는 도구 동작을 기준으로 관리합니다. 브라우저와 PDF 구조에 따라 결과가 달라질 수 있으므로 원본을 보관하고 공식 제출 전 다운로드 파일을 직접 확인하세요.'}
+          </p>
         </section>
 
       </div>

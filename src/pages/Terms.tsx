@@ -17,7 +17,7 @@ const Terms: React.FC = () => {
 
           <h1 className="text-3xl font-extrabold text-slate-900 mb-6">Terms of Service</h1>
           
-          <p className="text-sm text-slate-500 mb-8">Last Updated: June 9, 2026</p>
+          <p className="text-sm text-slate-500 mb-8">Last Updated: July 20, 2026</p>
 
           <div className="space-y-6 text-sm text-slate-650 leading-relaxed">
             
@@ -67,7 +67,7 @@ const Terms: React.FC = () => {
 
           <h1 className="text-3xl font-extrabold text-slate-900 mb-6">이용약관</h1>
           
-          <p className="text-sm text-slate-500 mb-8">최종 수정일: 2026년 6월 9일</p>
+          <p className="text-sm text-slate-500 mb-8">최종 수정일: 2026년 7월 20일</p>
 
           <div className="space-y-6 text-sm text-slate-650 leading-relaxed">
             
@@ -88,7 +88,7 @@ const Terms: React.FC = () => {
             <section>
               <h2 className="text-base font-bold text-slate-900 mb-2">제 3 조 (제한 없는 로컬 연산 및 서비스의 성격)</h2>
               <p>
-                서비스는 웹 브라우저 내부 연산(Client-Side Rendering) 모듈을 이용해 무설치형 문서 도구를 제공합니다. 따라서 별도의 서버 전송 과정은 전혀 수반하지 않습니다. 다만, 이용자가 사용하는 디바이스의 연산 파워 및 브라우저 성능 한계, 원본 PDF 파일의 복잡한 스키마 구조 등에 따라 페이지 렌더링에 상당한 시간이 소요되거나 연산 실패가 유발될 수 있습니다.
+                서비스 도구에서 사용자가 선택한 문서는 브라우저 메모리에서 처리되며 PDFFlow의 문서 처리 서버로 전송되지 않습니다. 다만 사이트 접속 및 광고 리소스 요청은 별도로 발생할 수 있고, 기기의 연산 성능이나 원본 PDF 구조에 따라 처리가 지연되거나 실패할 수 있습니다.
               </p>
             </section>
 

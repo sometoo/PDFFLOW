@@ -147,11 +147,11 @@ const RotatePdf: React.FC = () => {
   const faqs = isEn ? [
     {
       question: 'Will rotating pages corrupt the layout or text annotations?',
-      answer: 'No. The rotation changes a single metadata angle property of the page canvas container instead of rearranging text coordinates. The visual layout and sharp vector properties will remain completely intact.'
+      answer: 'The operation changes each page rotation value rather than rasterizing the page, so ordinary text and vector graphics are not re-compressed. Always inspect annotations, form fields, and signed documents afterward.'
     },
     {
       question: 'Does rotating a document multiple times reduce the quality?',
-      answer: 'No. Unlike raster image rotations that require re-compression, PDF rotation only toggles metadata properties. Quality loss is absolutely zero, regardless of how many times you rotate it.'
+      answer: 'Rotation does not intentionally re-compress page graphics. Repeated edits can still affect document-level metadata, forms, or signatures, so use the source file when changing direction again.'
     },
     {
       question: 'How do I rotate pages counter-clockwise by 90 degrees?',
@@ -160,7 +160,7 @@ const RotatePdf: React.FC = () => {
   ] : [
     {
       question: '회전을 시키면 텍스트의 레이아웃이 밀리거나 손상되나요?',
-      answer: '아니요, PDF 회전 기능은 텍스트나 그래픽 원본 속성을 재배치하는 것이 아니라 전체 페이지 캔버스의 투영 각도(Rotation Property Meta)만 조절하는 방식이므로 레이아웃이 꼬이거나 깨질 우려가 전혀 없습니다.'
+      answer: '일반적인 텍스트와 벡터 그래픽을 이미지로 다시 압축하지 않고 페이지 회전 값을 바꿉니다. 다만 주석, 양식, 전자서명이 있는 문서는 결과를 다시 확인해야 합니다.'
     },
     {
       question: '회전을 여러 번 수행하면 점차 화질이 떨어지나요?',
@@ -168,7 +168,7 @@ const RotatePdf: React.FC = () => {
     },
     {
       question: '반시계방향으로 90도 돌리려면 어떻게 지정해야 하나요?',
-      answer: '시계방향으로 270도 회전시키는 옵션을 선택하고 적용하시면 기술적으로 반시계방향 90도 회전과 완벽하게 동일한 결과물을 얻을 수 있습니다.'
+      answer: '시계방향 270도 회전은 방향상 반시계방향 90도 회전과 같습니다. 저장 후 페이지 방향과 주석 위치를 확인하세요.'
     }
   ];
 

@@ -26,7 +26,22 @@ const Home: React.FC = () => {
           isEn 
             ? "Edit your PDF files safely in your browser without uploading them to a server. Merge, split, extract, delete, rotate, and convert PDF files with simple free tools."
             : "파일 업로드 없이 브라우저에서 안전하게 PDF를 편집하세요. PDF 합치기, 분할, 페이지 추출, 삭제, 회전, JPG 변환까지 한 곳에서 처리합니다."
-        } 
+        }
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'PDFFlow',
+          url: `https://www.pdfflow.xyz${isEn ? '/en' : '/'}`,
+          description: isEn
+            ? 'Browser-based tools for common PDF editing and conversion tasks.'
+            : '일상적인 PDF 편집과 변환을 브라우저에서 처리하는 도구 모음입니다.',
+          inLanguage: isEn ? 'en' : 'ko',
+          publisher: {
+            '@type': 'Organization',
+            name: 'PDFFlow',
+            url: 'https://www.pdfflow.xyz/'
+          }
+        }}
       />
 
       {/* Hero Section */}
@@ -172,7 +187,7 @@ const Home: React.FC = () => {
             <p className="mt-2 text-sm text-slate-600 leading-relaxed">
               {isEn 
                 ? "Combine multiple PDF files into one document in the exact sequence you choose." 
-                : "여러 개의 PDF 보고서를 업로드 순서대로 결합하여 하나의 완벽한 PDF 파일로 병합합니다."}
+                : "여러 개의 PDF 보고서를 목록 순서대로 결합하여 하나의 새 PDF 파일로 만듭니다."}
             </p>
           </Link>
 
@@ -257,16 +272,39 @@ const Home: React.FC = () => {
           <div className="text-5xl bg-slate-50 p-6 rounded-2xl border border-slate-100">🛡️</div>
           <div>
             <h2 className="text-2xl font-bold text-slate-900 mb-3">
-              {isEn ? "100% Private, Client-Side Processing" : "100% 안전한 기기 내 로컬 가공"}
+              {isEn ? "Documents processed in your browser" : "문서 파일은 브라우저 안에서 처리됩니다"}
             </h2>
             <p className="text-slate-600 leading-relaxed text-sm md:text-base">
               {isEn ? (
-                "Unlike standard cloud utilities, PDFFlow never transmits your documents over the internet to remote servers. All PDF rendering, editing, and compression takes place solely inside your web browser session. Keep your contracts, receipts, and identity documents completely secure on your own device."
+                "Files selected in a PDFFlow tool are read in your browser memory and are not uploaded to a PDFFlow document-processing server. Website connection and advertising requests are separate from your document contents and are explained in our Privacy Policy."
               ) : (
-                "PDFFlow는 기존 서비스들과 달리 사용자가 선택한 어떠한 파일도 외부 서버로 전송하여 수집하지 않습니다. 모든 작업은 오직 사용자가 사용하는 현재 PC 또는 모바일 기기의 브라우저 내부 메모리 내에서 실행됩니다. 기밀 계약서나 민감한 개인 정보가 유출될 우려가 전혀 없는 안전한 작업 공간을 경험해보세요."
+                "PDFFlow 도구에서 선택한 파일은 현재 브라우저 메모리에서 읽고 처리하며 PDFFlow의 문서 처리 서버로 업로드하지 않습니다. 일반적인 웹사이트 접속과 광고 요청은 문서 내용과 별개이며 개인정보처리방침에서 구분해 안내합니다."
               )}
             </p>
+            <Link to={isEn ? '/en/privacy' : '/privacy'} className="mt-4 inline-flex text-sm font-semibold text-violet-600 hover:underline">
+              {isEn ? 'Read the full privacy explanation →' : '파일·접속 정보 처리 방식 자세히 보기 →'}
+            </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="mb-20">
+        <div className="mb-8 text-center">
+          <h2 className="text-2xl font-bold text-slate-900">{isEn ? 'Before editing an important PDF' : '중요한 PDF를 편집하기 전에'}</h2>
+          <p className="mt-2 text-sm text-slate-600">{isEn ? 'A short check prevents most submission mistakes.' : '간단한 사전 확인만으로 제출 오류를 줄일 수 있습니다.'}</p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            isEn ? ['Keep the source', 'Save an untouched copy before editing.'] : ['원본 보관', '편집 전 변경하지 않은 사본을 보관하세요.'],
+            isEn ? ['Check page numbers', 'Use the viewer page counter, not printed labels.'] : ['페이지 번호 확인', '인쇄된 쪽수가 아닌 뷰어 번호를 확인하세요.'],
+            isEn ? ['Watch advanced features', 'Forms, signatures, and outlines may change.'] : ['고급 기능 주의', '양식, 전자서명, 목차는 달라질 수 있습니다.'],
+            isEn ? ['Inspect the result', 'Open the download before formal submission.'] : ['결과 검수', '공식 제출 전에 다운로드 파일을 열어보세요.']
+          ].map(([title, body]) => (
+            <div key={title} className="rounded-xl border border-slate-200 bg-white p-5">
+              <h3 className="font-bold text-slate-900">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-600">{body}</p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -279,7 +317,7 @@ const Home: React.FC = () => {
           <div>
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-violet-100 text-lg font-bold text-violet-600 mb-4">1</div>
             <h3 className="text-lg font-bold text-slate-900 mb-2">
-              {isEn ? "Load Files" : "파일 업로드"}
+              {isEn ? "Select Files" : "파일 선택"}
             </h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               {isEn 
@@ -306,7 +344,7 @@ const Home: React.FC = () => {
             <p className="text-sm text-slate-600 leading-relaxed">
               {isEn 
                 ? "Click the button to instantly download the generated document to your device." 
-                : "변환 완료 단추를 누르면 브라우저가 생성해 낸 무결한 결과 사본 파일이 즉시 저장됩니다."}
+                : "변환 완료 단추를 누르면 브라우저가 생성한 결과 사본을 기기에 저장합니다."}
             </p>
           </div>
         </div>

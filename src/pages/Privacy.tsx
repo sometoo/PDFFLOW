@@ -6,112 +6,97 @@ const Privacy: React.FC = () => {
   const location = useLocation();
   const isEn = location.pathname.startsWith('/en');
 
+  const sections = isEn ? [
+    {
+      title: '1. Scope',
+      body: <>This policy explains how PDFFlow handles information when you visit the website, use a document tool, or contact support. It distinguishes document contents from ordinary website connection data.</>
+    },
+    {
+      title: '2. Files selected in a tool',
+      body: <><strong>PDF and image files selected in a PDFFlow tool are processed in browser memory and are not uploaded to a PDFFlow document-processing server.</strong> Output files are created on the same device and saved only when you choose to download them. Reloading or closing the page clears the in-memory work queue. Keep your own copy of every source file.</>
+    },
+    {
+      title: '3. Website connection and hosting data',
+      body: <>Like other websites, PDFFlow and its hosting or security providers may receive technical connection data such as IP address, request time, requested URL, browser type, and security signals. This data is used to deliver the site, prevent abuse, and diagnose availability. It is separate from the contents of files selected in the tools.</>
+    },
+    {
+      title: '4. Advertising, cookies, and third parties',
+      body: <>PDFFlow uses Google AdSense code to verify and, if approved, support the service with advertising. Google and its partners may use cookies, web beacons, IP addresses, or device identifiers to deliver, measure, and personalize ads subject to user choices and applicable consent requirements. Learn more in <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noreferrer" className="font-semibold text-violet-600 hover:underline">Google&apos;s explanation of data use on partner sites</a>. You can manage ad personalization in Google Ads Settings and control cookies through your browser.</>
+    },
+    {
+      title: '5. Support email',
+      body: <>If you email <a href="mailto:sometoo8435@gmail.com" className="font-semibold text-violet-600 hover:underline">sometoo8435@gmail.com</a>, the message may include your email address and any information you choose to provide. It is used to answer the request and maintain a reasonable support record. Do not attach confidential documents, identity records, contracts, or financial files.</>
+    },
+    {
+      title: '6. Choices and requests',
+      body: <>You may block or delete cookies in your browser, adjust Google advertising preferences, or stop using the site. Questions or requests about information sent directly to PDFFlow can be submitted to the support email above. Third-party providers handle requests relating to data they control under their own policies.</>
+    },
+    {
+      title: '7. Changes to this policy',
+      body: <>This policy may be updated when site functionality, advertising, or service providers change. Material changes will be reflected by the review date shown on this page.</>
+    }
+  ] : [
+    {
+      title: '1. 적용 범위',
+      body: <>이 방침은 PDFFlow 웹사이트 방문, 문서 도구 사용, 지원 문의 과정에서 정보가 어떻게 처리되는지 설명합니다. 사용자가 선택한 문서 내용과 일반적인 웹사이트 접속 정보를 구분해 안내합니다.</>
+    },
+    {
+      title: '2. 도구에서 선택한 파일',
+      body: <><strong>PDFFlow 도구에서 선택한 PDF와 이미지는 브라우저 메모리에서 처리되며 PDFFlow의 문서 처리 서버로 업로드되지 않습니다.</strong> 결과 파일도 같은 기기에서 생성되고 사용자가 다운로드할 때만 기기에 저장됩니다. 페이지를 새로고침하거나 닫으면 메모리에 있던 작업 목록이 사라집니다. 원본 파일은 사용자가 별도로 보관해야 합니다.</>
+    },
+    {
+      title: '3. 웹사이트 접속 및 호스팅 정보',
+      body: <>일반 웹사이트와 마찬가지로 PDFFlow와 호스팅·보안 제공업체는 사이트 제공, 악용 방지, 장애 확인을 위해 IP 주소, 요청 시각, 접속 주소, 브라우저 종류, 보안 신호 같은 기술적 접속 정보를 처리할 수 있습니다. 이 정보는 도구에서 선택한 파일의 내용과 별개입니다.</>
+    },
+    {
+      title: '4. 광고, 쿠키 및 제3자 서비스',
+      body: <>PDFFlow는 사이트 확인과 승인 후 광고 운영을 위해 Google AdSense 코드를 사용합니다. Google과 파트너는 사용자의 선택 및 관련 동의 요건에 따라 광고 제공·측정·개인화를 위해 쿠키, 웹 비콘, IP 주소 또는 기기 식별자를 사용할 수 있습니다. 자세한 내용은 <a href="https://policies.google.com/technologies/partner-sites?hl=ko" target="_blank" rel="noreferrer" className="font-semibold text-violet-600 hover:underline">Google 파트너 사이트의 데이터 사용 안내</a>에서 확인할 수 있습니다. Google 광고 설정과 브라우저 설정에서 맞춤 광고 및 쿠키를 관리할 수 있습니다.</>
+    },
+    {
+      title: '5. 지원 이메일',
+      body: <><a href="mailto:sometoo8435@gmail.com" className="font-semibold text-violet-600 hover:underline">sometoo8435@gmail.com</a>으로 문의하면 발신 이메일 주소와 사용자가 직접 작성한 정보가 전달됩니다. 해당 정보는 문의 답변과 합리적인 지원 기록 유지에 사용될 수 있습니다. 기밀 문서, 신분증, 계약서, 금융 자료는 이메일에 첨부하지 마세요.</>
+    },
+    {
+      title: '6. 사용자의 선택과 요청',
+      body: <>브라우저에서 쿠키를 차단·삭제하거나 Google 광고 설정을 변경할 수 있으며 언제든 사이트 이용을 중단할 수 있습니다. PDFFlow에 직접 보낸 정보와 관련한 문의는 위 지원 이메일로 접수할 수 있습니다. 제3자 제공업체가 관리하는 정보는 해당 업체의 방침에 따라 요청해야 합니다.</>
+    },
+    {
+      title: '7. 방침 변경',
+      body: <>사이트 기능, 광고 또는 서비스 제공업체가 바뀌면 이 방침도 수정될 수 있습니다. 중요한 변경 사항은 이 페이지의 최종 검토일에 반영합니다.</>
+    }
+  ];
+
   return (
-    <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
-      {isEn ? (
-        <>
-          <SEO 
-            title="Privacy Policy - PDFFlow" 
-            description="PDFFlow's Privacy Policy. We process your documents locally and never upload them to external servers." 
-          />
+    <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      <SEO
+        title={isEn ? 'Privacy Policy - PDFFlow' : '개인정보처리방침 - PDFFlow'}
+        description={isEn
+          ? 'How PDFFlow handles locally processed documents, website connection data, support email, cookies, and Google AdSense.'
+          : 'PDFFlow의 로컬 문서 처리, 웹 접속 정보, 지원 이메일, 쿠키 및 Google AdSense 관련 정보 처리 방침입니다.'}
+      />
 
-          <h1 className="text-3xl font-extrabold text-slate-900 mb-6">Privacy Policy</h1>
-          <p className="text-sm text-slate-500 mb-8">Effective Date: June 9, 2026</p>
+      <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+        {isEn ? 'Privacy Policy' : '개인정보처리방침'}
+      </h1>
+      <p className="mt-3 text-sm text-slate-500">
+        {isEn ? 'Effective and last reviewed: July 20, 2026' : '시행 및 최종 검토일: 2026년 7월 20일'}
+      </p>
 
-          <div className="space-y-6 text-sm text-slate-650 leading-relaxed">
-            <section className="bg-slate-50 border border-slate-100 rounded-lg p-5">
-              <h2 className="text-base font-bold text-slate-900 mb-2">1. Scope and Legal Nature</h2>
-              <p>
-                This policy outlines how PDFFlow ("the Service") manages data protection. By using our site, you agree to these terms. This document is a general guide for user information and does not constitute a formal legal contract or binding legal advice.
-              </p>
-            </section>
+      <div className="mt-8 rounded-xl border border-violet-100 bg-violet-50 p-5 text-sm leading-7 text-violet-950">
+        {isEn
+          ? 'Key point: document files stay in the browser. Website connection data, advertising requests, and information you send by email are separate and are described below.'
+          : '핵심 요약: 문서 파일은 브라우저 안에서 처리됩니다. 웹사이트 접속 정보, 광고 요청, 이메일로 직접 보낸 정보는 문서와 별개이며 아래에 구분해 설명합니다.'}
+      </div>
 
-            <section>
-              <h2 className="text-base font-bold text-slate-900 mb-2">2. Local Client-Side Processing</h2>
-              <p>
-                The Service operates entirely locally. <strong>No PDF files or images loaded by the user are transmitted, uploaded, or stored on external servers.</strong> All document manipulations, file merges, and split calculations happen solely inside your local web browser session memory. Your data never leaves your device, assuring the highest standard of confidentiality.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-base font-bold text-slate-900 mb-2">3. Data Collection and Support Inquiry</h2>
-              <p>
-                We do not require account registration or logins, meaning we do not collect personal identify information during standard use. If you contact our support desk directly via email (<a href="mailto:sometoo8435@gmail.com" className="text-violet-600 hover:underline">sometoo8435@gmail.com</a>), we will only use the details provided (such as name, email address, or device type) for resolving your specific technical inquiry.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-base font-bold text-slate-900 mb-2">4. Cookies and Google AdSense</h2>
-              <p>
-                To support and maintain this free service, Google AdSense advertisements may be displayed. Google and third-party vendors use cookies or device identifiers to serve customized ads based on your visiting history on this and other websites.
-              </p>
-              <p className="mt-2">
-                Users can manage, view, or opt out of personalized advertising by visiting Google Ad Settings or by restricting cookie permissions within their web browser configuration (e.g., Chrome Settings - Privacy and Security - Block Third-Party Cookies).
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-base font-bold text-slate-900 mb-2">5. Contact Information</h2>
-              <p>
-                For questions regarding this policy or data processing practices, please contact us by email:
-              </p>
-              <p className="mt-1 font-semibold text-slate-800">Email: sometoo8435@gmail.com</p>
-            </section>
-          </div>
-        </>
-      ) : (
-        <>
-          <SEO 
-            title="개인정보처리방침 - PDFFlow" 
-            description="PDFFlow의 개인정보처리방침입니다. 당사는 사용자의 파일을 절대 서버에 업로드하지 않으며 브라우저 내 로컬 가공을 보장합니다." 
-          />
-
-          <h1 className="text-3xl font-extrabold text-slate-900 mb-6">개인정보처리방침</h1>
-          <p className="text-sm text-slate-500 mb-8">시행일자: 2026년 6월 9일</p>
-
-          <div className="space-y-6 text-sm text-slate-650 leading-relaxed">
-            <section className="bg-slate-50 border border-slate-100 rounded-lg p-5">
-              <h2 className="text-base font-bold text-slate-900 mb-2">1. 개인정보처리방침의 범위 및 법적 성격</h2>
-              <p>
-                본 방침은 PDFFlow(이하 "서비스")가 제공하는 웹사이트 이용 시 적용되는 개인정보 처리 수준을 명확히 알리기 위해 작성되었습니다. 본 방침은 사용자 정보 권리 보호를 위한 일반적인 안내 문서이며, 어떠한 형태의 계약을 맺는 것이 아니며 특정 관할권의 정식 법적 계약서가 아님을 인지해 주시기 바랍니다.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-base font-bold text-slate-900 mb-2">2. 파일 비업로드 정책 및 local 처리원칙</h2>
-              <p>
-                서비스는 사용자가 웹 사이트의 도구를 사용하기 위해 선택 및 로드한 어떠한 파일(PDF, 이미지 등)도 외부 서버로 전송하지 않습니다. 모든 변환 및 편집 등의 주요 연산은 <strong>사용자의 브라우저 메모리 안에서만 로컬(Local) 방식으로 즉각 수행</strong>됩니다. 사용자가 업로드한 원본 문서 데이터는 웹 사이트 운영 주체를 포함한 제3자에게 수집, 저장, 전송되지 않으므로 최상 수준의 개인정보 비밀 유지가 보장됩니다.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-base font-bold text-slate-900 mb-2">3. 수집하는 개인정보 항목 및 목적</h2>
-              <p>
-                서비스는 회원가입이나 로그인을 제공하지 않으므로 사용자의 인적 정보를 일체 수집하지 않습니다. 단, 사용자가 문의 이메일(<a href="mailto:sometoo8435@gmail.com" className="text-violet-600 hover:underline">sometoo8435@gmail.com</a>)을 통해 직접 제공하는 정보(이름, 이메일 주소, 기기 모델 등)에 한해 사용자 지원 및 오류 해결을 위한 목적으로만 일시 보관할 수 있습니다.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-base font-bold text-slate-900 mb-2">4. 쿠키(Cookie) 및 제3자 맞춤 광고 안내</h2>
-              <p>
-                향후 서비스 운영 지원 및 지속적인 서비스 제공을 위해 Google AdSense(구글 애드센스) 맞춤형 광고가 게재될 예정입니다. 이 과정에서 구글 및 파트너사는 쿠키 또는 모바일 광고 식별자를 사용하여 사용자의 이전 방문 기록을 바탕으로 맞춤 광고를 노출할 수 있습니다.
-              </p>
-              <p className="mt-2">
-                사용자는 언제든지 사용하는 브라우저 설정(Chrome 설정 - 개인정보 및 보안 - 쿠키 차단 등)이나 구글 광고 설정 페이지를 방문하여 관심 분야 기반 맞춤 광고 쿠키의 사용을 수동으로 제한하고 차단할 수 있습니다.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-base font-bold text-slate-900 mb-2">5. 문의 및 불만 처리</h2>
-              <p>
-                본 방침이나 서비스의 개인정보 보호 조치와 관련하여 추가적인 의문이나 건의 사항이 있으신 경우 아래 전자우편으로 연락해 주시면 적극적으로 대응하겠습니다.
-              </p>
-              <p className="mt-1 font-semibold text-slate-800">이메일: sometoo8435@gmail.com</p>
-            </section>
-          </div>
-        </>
-      )}
-    </div>
+      <div className="mt-10 space-y-8 text-sm leading-7 text-slate-600">
+        {sections.map((section) => (
+          <section key={section.title}>
+            <h2 className="text-lg font-bold text-slate-900">{section.title}</h2>
+            <p className="mt-2">{section.body}</p>
+          </section>
+        ))}
+      </div>
+    </article>
   );
 };
 

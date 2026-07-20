@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SEO from './SEO';
+import { getToolGuide } from '../data/toolGuides';
 
 export interface FAQItem {
   question: string;
@@ -38,10 +39,34 @@ const DocLayout: React.FC<DocLayoutProps> = ({
 }) => {
   const location = useLocation();
   const isEn = location.pathname.startsWith('/en');
+  const guide = getToolGuide(location.pathname, isEn);
 
   return (
     <article className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-      <SEO title={seoTitle} description={seoDesc} />
+      <SEO
+        title={seoTitle}
+        description={seoDesc}
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: title,
+          applicationCategory: 'UtilitiesApplication',
+          operatingSystem: 'Any modern web browser',
+          url: `https://www.pdfflow.xyz${location.pathname}`,
+          description: seoDesc,
+          inLanguage: isEn ? 'en' : 'ko',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'KRW'
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'PDFFlow',
+            url: 'https://www.pdfflow.xyz/'
+          }
+        }}
+      />
 
       {/* Header Info */}
       <div className="mb-8 text-center sm:text-left">
@@ -75,6 +100,44 @@ const DocLayout: React.FC<DocLayoutProps> = ({
           </p>
         </div>
       </section>
+
+      {guide && (
+        <section className="mb-12 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+          <div className="max-w-3xl">
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-violet-600">
+              {isEn ? 'Practical guide' : '도구 상세 가이드'}
+            </p>
+            <h2 className="mt-2 text-2xl font-bold text-slate-900">{guide.heading}</h2>
+            <div className="mt-4 space-y-3 text-sm leading-7 text-slate-600 sm:text-base">
+              {guide.overview.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+            </div>
+          </div>
+
+          <dl className="mt-7 grid gap-3 sm:grid-cols-3">
+            {guide.facts.map((fact) => (
+              <div key={fact.label} className="rounded-xl bg-slate-50 p-4 ring-1 ring-slate-100">
+                <dt className="text-xs font-semibold text-slate-500">{fact.label}</dt>
+                <dd className="mt-1 text-sm font-bold text-slate-900">{fact.value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="mt-8 grid gap-8 md:grid-cols-2">
+            <div>
+              <h3 className="text-base font-bold text-slate-900">{guide.bestForTitle}</h3>
+              <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+                {guide.bestFor.map((item) => <li key={item} className="flex gap-2"><span className="text-violet-600">✓</span><span>{item}</span></li>)}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-base font-bold text-slate-900">{guide.verifyTitle}</h3>
+              <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-600">
+                {guide.verify.map((item) => <li key={item} className="flex gap-2"><span className="text-amber-600">•</span><span>{item}</span></li>)}
+              </ul>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Information Grid: How to & Warnings */}
       <div className="grid gap-8 md:grid-cols-2 mb-12">

@@ -1,12 +1,23 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import * as pdfjsLib from 'pdfjs-dist';
 import JSZip from 'jszip';
 import DocLayout from '../../components/DocLayout';
 
-// Set up pdf.js worker using unpkg CDN which matches installed package version
-const pdfjsVersion = pdfjsLib.version || '3.11.174';
-(pdfjsLib as any).GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjsVersion}/build/pdf.worker.min.js`;
+let pdfJsPromise: Promise<typeof import('pdfjs-dist')> | undefined;
+
+const loadPdfJs = () => {
+  if (!pdfJsPromise) {
+    pdfJsPromise = Promise.all([
+      import('pdfjs-dist'),
+      import('pdfjs-dist/build/pdf.worker.min.mjs?url')
+    ]).then(([pdfjs, workerModule]) => {
+      pdfjs.GlobalWorkerOptions.workerSrc = workerModule.default;
+      return pdfjs;
+    });
+  }
+
+  return pdfJsPromise;
+};
 
 interface PdfFile {
   file: File;
@@ -44,6 +55,7 @@ const PdfToJpg: React.FC = () => {
     try {
       const buffer = await selectedFile.arrayBuffer();
       // Load document using pdfjs
+      const pdfjsLib = await loadPdfJs();
       const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
       const pdf = await loadingTask.promise;
       const pageCount = pdf.numPages;
@@ -97,6 +109,7 @@ const PdfToJpg: React.FC = () => {
 
     setProcessing(true);
     try {
+      const pdfjsLib = await loadPdfJs();
       const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(file.buffer) });
       const pdf = await loadingTask.promise;
       const baseName = file.name.replace(/\.[^/.]+$/, "");
@@ -317,9 +330,9 @@ const PdfToJpg: React.FC = () => {
   return (
     <DocLayout
       seoTitle={isEn ? "PDF to JPG - Convert PDF pages to JPG online | PDFFlow" : "PDF JPG 변환 - PDF 페이지를 이미지로 저장 | PDFFlow"}
-      seoDesc={isEn ? "Convert PDF pages to JPG images online for free. Download individual images or a single ZIP archive. 100% secure local browser processing." : "PDF 페이지를 JPG 이미지로 변환해 저장할 수 있습니다. 여러 페이지는 ZIP 파일로 다운로드할 수 있습니다."}
+      seoDesc={isEn ? "Convert PDF pages to JPG images in your browser. Download one image or package multiple selected pages in a ZIP archive." : "PDF 페이지를 브라우저에서 JPG 이미지로 변환하세요. 여러 페이지는 ZIP 파일로 내려받을 수 있습니다."}
       title={isEn ? "PDF to JPG" : "PDF JPG 변환"}
-      description={isEn ? "Convert each page of a PDF document into a high-quality JPG image instantly." : "PDF 문서의 각 페이지를 고화질 JPG 이미지 파일로 순식간에 렌더링하여 안전하게 추출해보세요."}
+      description={isEn ? "Render selected PDF pages as high-resolution JPG images and download them individually or in a ZIP." : "선택한 PDF 페이지를 고해상도 JPG 이미지로 렌더링하고 개별 파일 또는 ZIP으로 저장하세요."}
       instructions={instructions}
       caveats={caveats}
       faqs={faqs}

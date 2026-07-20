@@ -33,6 +33,9 @@ const Footer: React.FC = () => {
             <Link to={isEn ? "/en/contact" : "/contact"} className="hover:text-violet-600 transition">
               {isEn ? 'Contact Us' : '문의하기'}
             </Link>
+            <Link to={isEn ? "/en/editorial-policy" : "/editorial-policy"} className="hover:text-violet-600 transition">
+              {isEn ? 'Editorial Policy' : '콘텐츠 운영 원칙'}
+            </Link>
             <Link to={isEn ? "/en/blog" : "/blog"} className="hover:text-violet-600 transition">
               {isEn ? 'Blog' : '블로그'}
             </Link>
@@ -43,8 +46,8 @@ const Footer: React.FC = () => {
           <p>&copy; {new Date().getFullYear()} PDFFlow. All rights reserved.</p>
           <p className="max-w-md md:text-right">
             {isEn 
-              ? 'PDFFlow prioritizes client-side local processing. None of your uploaded PDF files are collected or stored on our servers.'
-              : 'PDFFlow는 브라우저 내부 로컬 연산을 우선하며, 업로드된 어떠한 PDF 파일도 수집하거나 서버에 저장하지 않습니다.'}
+              ? 'Files selected in a tool are processed in browser memory and are not uploaded to a PDFFlow document-processing server.'
+              : '도구에서 선택한 파일은 브라우저 메모리에서 처리되며 PDFFlow의 문서 처리 서버로 업로드되지 않습니다.'}
           </p>
         </div>
 

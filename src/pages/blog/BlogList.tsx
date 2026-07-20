@@ -12,16 +12,19 @@ const BlogList: React.FC = () => {
   return (
     <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
       <SEO 
-        title={isEn ? "Blog - PDF Tips & Tricks | PDFFlow" : "블로그 - PDF 활용 팁 | PDFFlow"} 
-        description={isEn ? "Explore helpful tips and expert guides on merging, splitting, page extraction, and image conversion for PDF documents." : "PDF 합치기, 분할, 보안, 이미지 변환에 대한 다양하고 전문적인 활용 팁과 가이드를 공유합니다."} 
+        title={isEn ? "PDF Guides and Practical Checklists | PDFFlow" : "PDF 가이드와 실무 체크리스트 | PDFFlow"}
+        description={isEn ? "Tested instructions, limitations, and checklists for merging, splitting, extracting, and converting PDF documents in a browser." : "PDF 합치기, 분할, 추출, 변환 작업을 직접 확인할 수 있도록 사용법과 한계, 결과 검수 체크리스트를 제공합니다."}
       />
 
       <div className="text-center sm:text-left mb-10">
         <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
-          {isEn ? 'Blog' : '블로그'}
+          {isEn ? 'PDF Guides' : 'PDF 실무 가이드'}
         </h1>
         <p className="mt-2 text-base text-slate-600">
-          {isEn ? 'Explore guides, tips, and tutorials to make your PDF workflows smarter and faster.' : 'PDF를 스마트하고 안전하게 활용할 수 있는 다양한 팁과 사용 방법을 확인해보세요.'}
+          {isEn ? 'Practical instructions and limitations reviewed against the tools available on this site.' : '이 사이트에서 제공하는 도구를 기준으로 작성한 사용법, 한계, 결과 확인 방법을 안내합니다.'}
+        </p>
+        <p className="mt-3 text-sm text-slate-500">
+          {isEn ? 'Maintained by the PDFFlow Editorial Team · Technical review: July 20, 2026' : 'PDFFlow 편집팀 작성·관리 · 기술 검토일: 2026년 7월 20일'}
         </p>
       </div>
 

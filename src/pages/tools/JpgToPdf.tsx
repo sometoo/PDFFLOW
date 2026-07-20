@@ -158,7 +158,7 @@ const JpgToPdf: React.FC = () => {
   ];
 
   const caveats = isEn ? [
-    'PDF pages are sized dynamically to match the uploaded image dimensions. Visual resolution remains 100% untouched.',
+    'PDF pages are sized to match each selected image. The image is embedded without intentionally changing its pixel dimensions, but PDF viewers may display it at different zoom levels.',
     'Combining more than 30 high-resolution camera photos at once might occupy high device RAM, making the page laggy.',
     'Leaving or reloading the page resets the current image queue, so wait for the download to start.'
   ] : [

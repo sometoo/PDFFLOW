@@ -241,7 +241,7 @@ const DeletePages: React.FC = () => {
   return (
     <DocLayout
       seoTitle={isEn ? "Delete PDF Pages - Remove pages from PDF online | PDFFlow" : "PDF 페이지 삭제 - 불필요한 PDF 페이지 제거 | PDFFlow"}
-      seoDesc={isEn ? "Remove unwanted pages from a PDF document easily and save the output. Complete browser-side local operation for 100% data privacy." : "PDF 파일에서 필요 없는 페이지를 선택해 삭제하고 새 파일로 저장하세요. 모든 작업은 브라우저 내부에서 처리됩니다."}
+      seoDesc={isEn ? "Remove unwanted pages from a PDF and save a new document. Selected files are processed in your browser and are not uploaded to a PDFFlow processing server." : "PDF 파일에서 필요 없는 페이지를 선택해 삭제하고 새 파일로 저장하세요. 선택한 파일은 브라우저 내부에서 처리됩니다."}
       title={isEn ? "Delete PDF Pages" : "PDF 페이지 삭제"}
       description={isEn ? "Delete specific blank pages, draft notes, or unwanted sections from a PDF file quickly." : "다중 페이지 PDF 문서에서 잘못 인쇄되거나 더 이상 필요하지 않은 페이지를 신속히 삭제하고 저장하세요."}
       instructions={instructions}
