@@ -1,23 +1,19 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 import DocLayout from '../../components/DocLayout';
-import { copyPdfArrayBuffer, inspectPdf, loadPdfForEditing, ProtectedPdfError } from '../../lib/pdf';
-
-interface MergeFile {
-  id: string;
-  file: File;
-  name: string;
-  size: number;
-}
+import { copyPdfArrayBuffer, loadPdfForEditing, ProtectedPdfError } from '../../lib/pdf';
+import { createMergeFileEntries, type MergeFileEntry, validateMergeFiles } from '../../lib/mergeFiles';
 
 const MergePdf: React.FC = () => {
   const location = useLocation();
   const isEn = location.pathname.startsWith('/en');
 
-  const [files, setFiles] = useState<MergeFile[]>([]);
+  const [files, setFiles] = useState<MergeFileEntry[]>([]);
   const [processing, setProcessing] = useState(false);
+  const [addingFiles, setAddingFiles] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
+  const addingFilesRef = useRef(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -26,34 +22,31 @@ const MergePdf: React.FC = () => {
   };
 
   const addFiles = async (fileList: FileList) => {
-    const newFiles: MergeFile[] = [];
-    for (let i = 0; i < fileList.length; i++) {
-      const file = fileList[i];
-      if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-        try {
-          await inspectPdf(await file.arrayBuffer());
-          newFiles.push({
-            id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            file,
-            name: file.name,
-            size: file.size
-          });
-        } catch (error: unknown) {
-          console.error(error);
-          alert(error instanceof ProtectedPdfError
-            ? (isEn
-              ? 'This PDF file is protected and cannot be loaded. Please upload a document that is not protected.'
-              : '이 PDF 파일은 비밀번호로 보호되어 있어 로드할 수 없습니다. 암호가 걸려 있지 않은 문서를 업로드해 주십시오.')
-            : (isEn
-              ? `An error occurred while loading "${file.name}". The file may be protected or corrupted.`
-              : `"${file.name}" 파일 로딩 중 에러가 발생했습니다. 암호가 걸려있거나 손상된 파일일 수 있습니다.`));
-        }
+    if (addingFilesRef.current) return;
+    addingFilesRef.current = true;
+    setAddingFiles(true);
+
+    try {
+      const { validFiles, rejectedFiles } = await validateMergeFiles(Array.from(fileList));
+      for (const { file, error } of rejectedFiles) {
+        console.error(error);
+        alert(error instanceof ProtectedPdfError
+          ? (isEn
+            ? 'This PDF file is protected and cannot be loaded. Please upload a document that is not protected.'
+            : '이 PDF 파일은 비밀번호로 보호되어 있어 로드할 수 없습니다. 암호가 걸려 있지 않은 문서를 업로드해 주십시오.')
+          : (isEn
+            ? `An error occurred while loading "${file.name}". The file may be protected or corrupted.`
+            : `"${file.name}" 파일 로딩 중 에러가 발생했습니다. 암호가 걸려있거나 손상된 파일일 수 있습니다.`));
       }
+      setFiles((prev) => [...prev, ...createMergeFileEntries(validFiles)]);
+    } finally {
+      addingFilesRef.current = false;
+      setAddingFiles(false);
     }
-    setFiles((prev) => [...prev, ...newFiles]);
   };
 
   const handleDragOver = (e: React.DragEvent) => {
+    if (addingFilesRef.current) return;
     e.preventDefault();
     setIsDragOver(true);
   };
@@ -63,6 +56,7 @@ const MergePdf: React.FC = () => {
   };
 
   const handleDrop = async (e: React.DragEvent) => {
+    if (addingFilesRef.current) return;
     e.preventDefault();
     setIsDragOver(false);
     if (e.dataTransfer.files) {
@@ -71,6 +65,7 @@ const MergePdf: React.FC = () => {
   };
 
   const moveFile = (index: number, direction: number) => {
+    if (addingFilesRef.current) return;
     const targetIndex = index + direction;
     if (targetIndex < 0 || targetIndex >= files.length) return;
     const updated = [...files];
@@ -81,14 +76,17 @@ const MergePdf: React.FC = () => {
   };
 
   const removeFile = (index: number) => {
+    if (addingFilesRef.current) return;
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const clearAll = () => {
+    if (addingFilesRef.current) return;
     setFiles([]);
   };
 
   const handleMerge = async () => {
+    if (addingFilesRef.current) return;
     if (files.length < 2) {
       alert(isEn ? 'At least 2 PDF files are required for merging.' : '병합을 수행하려면 최소 2개 이상의 PDF 파일을 등록해야 합니다.');
       return;
@@ -221,6 +219,8 @@ const MergePdf: React.FC = () => {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 text-center transition cursor-pointer ${
+            addingFiles ? 'pointer-events-none opacity-60' : ''
+          } ${
             isDragOver ? 'border-violet-500 bg-violet-50/50' : 'border-slate-300 hover:border-violet-500 hover:bg-slate-50'
           }`}
         >
@@ -229,11 +229,14 @@ const MergePdf: React.FC = () => {
             multiple
             accept=".pdf"
             onChange={handleFileChange}
+            disabled={addingFiles}
             className="absolute inset-0 opacity-0 cursor-pointer"
           />
           <div className="text-4xl mb-4">📂</div>
           <p className="text-sm font-semibold text-slate-800">
-            {isEn ? "Drag and drop PDF files here, or click to browse" : "PDF 파일들을 이곳에 드래그하거나 클릭하여 추가하세요"}
+            {addingFiles
+              ? (isEn ? 'Checking selected PDF files...' : '선택한 PDF 파일 확인 중...')
+              : (isEn ? "Drag and drop PDF files here, or click to browse" : "PDF 파일들을 이곳에 드래그하거나 클릭하여 추가하세요")}
           </p>
           <p className="mt-1 text-xs text-slate-500">
             {isEn ? "Select multiple PDF files to combine them." : "여러 개의 PDF를 선택하여 한 번에 합칠 수 있습니다."}
@@ -247,6 +250,7 @@ const MergePdf: React.FC = () => {
             </span>
             <button 
               onClick={clearAll} 
+              disabled={addingFiles}
               className="text-xs font-semibold text-red-500 hover:text-red-700 hover:bg-red-50 px-2.5 py-1 rounded"
             >
               {isEn ? 'Clear All' : '전체 삭제'}
@@ -269,7 +273,7 @@ const MergePdf: React.FC = () => {
                 <div className="flex items-center gap-1.5 shrink-0">
                   <button
                     onClick={() => moveFile(idx, -1)}
-                    disabled={idx === 0}
+                    disabled={addingFiles || idx === 0}
                     className="p-1 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-100 rounded"
                     title={isEn ? "Move Up" : "위로 이동"}
                   >
@@ -277,7 +281,7 @@ const MergePdf: React.FC = () => {
                   </button>
                   <button
                     onClick={() => moveFile(idx, 1)}
-                    disabled={idx === files.length - 1}
+                    disabled={addingFiles || idx === files.length - 1}
                     className="p-1 text-slate-500 hover:text-slate-800 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-100 rounded"
                     title={isEn ? "Move Down" : "아래로 이동"}
                   >
@@ -285,6 +289,7 @@ const MergePdf: React.FC = () => {
                   </button>
                   <button
                     onClick={() => removeFile(idx)}
+                    disabled={addingFiles}
                     className="p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded ml-2"
                     title={isEn ? "Delete" : "삭제"}
                   >
@@ -296,22 +301,25 @@ const MergePdf: React.FC = () => {
           </ul>
 
           <div className="flex justify-end gap-3">
-            <label className="flex items-center justify-center rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer">
-              {isEn ? 'Add Files' : '파일 추가'}
+            <label className={`flex items-center justify-center rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 cursor-pointer ${addingFiles ? 'pointer-events-none opacity-50' : ''}`}>
+              {addingFiles ? (isEn ? 'Checking files...' : '파일 확인 중...') : (isEn ? 'Add Files' : '파일 추가')}
               <input
                 type="file"
                 multiple
                 accept=".pdf"
                 onChange={handleFileChange}
+                disabled={addingFiles}
                 className="hidden"
               />
             </label>
             <button
               onClick={handleMerge}
-              disabled={processing}
+              disabled={processing || addingFiles}
               className="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-violet-700 disabled:bg-violet-400 disabled:cursor-not-allowed transition flex items-center gap-2"
             >
-              {processing ? (
+              {addingFiles ? (
+                isEn ? 'Checking files...' : '파일 확인 중...'
+              ) : processing ? (
                 <>
                   <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                   {isEn ? 'Merging...' : '병합 중...'}

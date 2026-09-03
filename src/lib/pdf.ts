@@ -7,6 +7,9 @@ export class ProtectedPdfError extends Error {
   }
 }
 
+const isEncryptedPdfError = (error: unknown): boolean => error instanceof EncryptedPDFError
+  || error instanceof Error && error.message.includes('Input document to `PDFDocument.load` is encrypted.');
+
 export type PdfData = ArrayBuffer | Uint8Array;
 
 export const copyPdfData = (data: PdfData): Uint8Array => {
@@ -15,8 +18,10 @@ export const copyPdfData = (data: PdfData): Uint8Array => {
 };
 
 export const copyPdfArrayBuffer = (data: PdfData): ArrayBuffer => {
-  const copy = copyPdfData(data);
-  return copy.buffer.slice(copy.byteOffset, copy.byteOffset + copy.byteLength) as ArrayBuffer;
+  const source = data instanceof Uint8Array ? data : new Uint8Array(data);
+  const copy = new Uint8Array(source.byteLength);
+  copy.set(source);
+  return copy.buffer;
 };
 
 export interface PdfInspection {
@@ -38,10 +43,9 @@ export const inspectPdf = async (data: PdfData): Promise<PdfInspection> => {
 
 export const loadPdfForEditing = async (data: PdfData): Promise<PDFDocument> => {
   try {
-    const inspected = await inspectPdf(data);
-    return await PDFDocument.load(copyPdfData(inspected.bytes));
+    return await PDFDocument.load(data);
   } catch (error) {
-    if (error instanceof ProtectedPdfError || error instanceof EncryptedPDFError) {
+    if (error instanceof ProtectedPdfError || isEncryptedPdfError(error)) {
       throw new ProtectedPdfError();
     }
     throw error;

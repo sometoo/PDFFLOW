@@ -38,6 +38,18 @@ test('copyPdfData keeps a second independent copy after PDF.js transfers the fir
   assert.deepEqual(copyPdfData(source), new Uint8Array([1, 2, 3, 4]));
 });
 
+test('copyPdfArrayBuffer returns an independent ArrayBuffer for tool state', async () => {
+  const { copyPdfArrayBuffer } = await import('../src/lib/pdf.ts');
+  const source = new Uint8Array([5, 6, 7, 8]);
+  const copiedBuffer = copyPdfArrayBuffer(source);
+  const copied = new Uint8Array(copiedBuffer);
+
+  copied[0] = 99;
+
+  assert.deepEqual(source, new Uint8Array([5, 6, 7, 8]));
+  assert.deepEqual(copied, new Uint8Array([99, 6, 7, 8]));
+});
+
 test('inspectPdf returns the page count for a normal PDF', async () => {
   const { inspectPdf } = await import('../src/lib/pdf.ts');
   const document = await PDFDocument.create();
@@ -51,9 +63,32 @@ test('inspectPdf returns the page count for a normal PDF', async () => {
 
 test('inspectPdf rejects an encrypted PDF before a tool can queue it', async () => {
   const { ProtectedPdfError, inspectPdf } = await import('../src/lib/pdf.ts');
+  const parsedWithIgnore = await PDFDocument.load(encryptedFixture(), { ignoreEncryption: true });
+
+  assert.equal(parsedWithIgnore.isEncrypted, true);
 
   await assert.rejects(
     () => inspectPdf(encryptedFixture()),
+    (error: unknown) => error instanceof ProtectedPdfError
+  );
+});
+
+test('loadPdfForEditing opens a normal PDF with its pages available', async () => {
+  const { loadPdfForEditing } = await import('../src/lib/pdf.ts');
+  const document = await PDFDocument.create();
+  document.addPage();
+  document.addPage();
+
+  const editable = await loadPdfForEditing(await document.save());
+
+  assert.equal(editable.getPageCount(), 2);
+});
+
+test('loadPdfForEditing maps an encrypted fixture to ProtectedPdfError', async () => {
+  const { loadPdfForEditing, ProtectedPdfError } = await import('../src/lib/pdf.ts');
+
+  await assert.rejects(
+    () => loadPdfForEditing(encryptedFixture()),
     (error: unknown) => error instanceof ProtectedPdfError
   );
 });
