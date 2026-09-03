@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import SEO from './SEO';
 import { getToolGuide } from '../data/toolGuides';
+import { isEnglishPath, normalizePathname } from '../lib/pathname';
 
 export interface FAQItem {
   question: string;
@@ -38,8 +39,9 @@ const DocLayout: React.FC<DocLayoutProps> = ({
   children
 }) => {
   const location = useLocation();
-  const isEn = location.pathname.startsWith('/en');
-  const guide = getToolGuide(location.pathname, isEn);
+  const pathname = normalizePathname(location.pathname);
+  const isEn = isEnglishPath(pathname);
+  const guide = getToolGuide(pathname, isEn);
 
   return (
     <article className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
@@ -52,7 +54,7 @@ const DocLayout: React.FC<DocLayoutProps> = ({
           name: title,
           applicationCategory: 'UtilitiesApplication',
           operatingSystem: 'Any modern web browser',
-          url: `https://www.pdfflow.xyz${location.pathname}`,
+          url: `https://www.pdfflow.xyz${pathname}`,
           description: seoDesc,
           inLanguage: isEn ? 'en' : 'ko',
           offers: {

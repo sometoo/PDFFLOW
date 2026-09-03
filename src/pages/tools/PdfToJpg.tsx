@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import JSZip from 'jszip';
 import DocLayout from '../../components/DocLayout';
+import type { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
+import { copyPdfArrayBuffer, copyPdfData } from '../../lib/pdf';
 
 let pdfJsPromise: Promise<typeof import('pdfjs-dist')> | undefined;
 
@@ -56,7 +58,7 @@ const PdfToJpg: React.FC = () => {
       const buffer = await selectedFile.arrayBuffer();
       // Load document using pdfjs
       const pdfjsLib = await loadPdfJs();
-      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(buffer) });
+      const loadingTask = pdfjsLib.getDocument({ data: copyPdfData(buffer) });
       const pdf = await loadingTask.promise;
       const pageCount = pdf.numPages;
 
@@ -65,11 +67,11 @@ const PdfToJpg: React.FC = () => {
         name: selectedFile.name,
         size: selectedFile.size,
         pageCount,
-        buffer
+        buffer: copyPdfArrayBuffer(buffer)
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      if (err.message && (err.message.includes('encrypted') || err.message.includes('password'))) {
+      if (err instanceof Error && (err.message.includes('encrypted') || err.message.includes('password'))) {
         alert(isEn 
           ? 'This PDF file is protected and cannot be loaded. Please upload a document that is not protected.' 
           : '이 PDF 파일은 비밀번호로 보호되어 있어 로드할 수 없습니다. 암호가 걸려 있지 않은 문서를 업로드해 주십시오.');
@@ -110,7 +112,7 @@ const PdfToJpg: React.FC = () => {
     setProcessing(true);
     try {
       const pdfjsLib = await loadPdfJs();
-      const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(file.buffer) });
+      const loadingTask = pdfjsLib.getDocument({ data: copyPdfData(file.buffer) });
       const pdf = await loadingTask.promise;
       const baseName = file.name.replace(/\.[^/.]+$/, "");
 
@@ -219,7 +221,7 @@ const PdfToJpg: React.FC = () => {
     }
   };
 
-  const renderPageToBlob = async (pdf: any, pageNum: number): Promise<Blob | null> => {
+  const renderPageToBlob = async (pdf: PDFDocumentProxy, pageNum: number): Promise<Blob | null> => {
     try {
       const page = await pdf.getPage(pageNum);
       // High-quality rendering scale
@@ -233,6 +235,7 @@ const PdfToJpg: React.FC = () => {
       canvas.width = viewport.width;
 
       const renderContext = {
+        canvas,
         canvasContext: context,
         viewport: viewport
       };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 import DocLayout from '../../components/DocLayout';
+import { copyPdfArrayBuffer, inspectPdf, loadPdfForEditing, ProtectedPdfError } from '../../lib/pdf';
 
 interface MergeFile {
   id: string;
@@ -18,23 +19,35 @@ const MergePdf: React.FC = () => {
   const [processing, setProcessing] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      addFiles(e.target.files);
+      await addFiles(e.target.files);
     }
   };
 
-  const addFiles = (fileList: FileList) => {
+  const addFiles = async (fileList: FileList) => {
     const newFiles: MergeFile[] = [];
     for (let i = 0; i < fileList.length; i++) {
       const file = fileList[i];
       if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-        newFiles.push({
-          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          file,
-          name: file.name,
-          size: file.size
-        });
+        try {
+          await inspectPdf(await file.arrayBuffer());
+          newFiles.push({
+            id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            file,
+            name: file.name,
+            size: file.size
+          });
+        } catch (error: unknown) {
+          console.error(error);
+          alert(error instanceof ProtectedPdfError
+            ? (isEn
+              ? 'This PDF file is protected and cannot be loaded. Please upload a document that is not protected.'
+              : '이 PDF 파일은 비밀번호로 보호되어 있어 로드할 수 없습니다. 암호가 걸려 있지 않은 문서를 업로드해 주십시오.')
+            : (isEn
+              ? `An error occurred while loading "${file.name}". The file may be protected or corrupted.`
+              : `"${file.name}" 파일 로딩 중 에러가 발생했습니다. 암호가 걸려있거나 손상된 파일일 수 있습니다.`));
+        }
       }
     }
     setFiles((prev) => [...prev, ...newFiles]);
@@ -49,11 +62,11 @@ const MergePdf: React.FC = () => {
     setIsDragOver(false);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
     if (e.dataTransfer.files) {
-      addFiles(e.dataTransfer.files);
+      await addFiles(e.dataTransfer.files);
     }
   };
 
@@ -90,8 +103,8 @@ const MergePdf: React.FC = () => {
         
         let srcDoc;
         try {
-          srcDoc = await PDFDocument.load(fileBuffer);
-        } catch (loadErr) {
+          srcDoc = await loadPdfForEditing(fileBuffer);
+        } catch {
           alert(isEn 
             ? `An error occurred while loading "${fileObj.name}". The file may be protected or corrupted.` 
             : `"${fileObj.name}" 파일 로딩 중 에러가 발생했습니다. 암호가 걸려있거나 손상된 파일일 수 있습니다.`);
@@ -104,7 +117,7 @@ const MergePdf: React.FC = () => {
       }
 
       const mergedPdfBytes = await mergedPdf.save();
-      const blob = new Blob([mergedPdfBytes as any], { type: 'application/pdf' });
+      const blob = new Blob([copyPdfArrayBuffer(mergedPdfBytes)], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;

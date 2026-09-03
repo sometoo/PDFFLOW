@@ -1,28 +1,11 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { slugMap } from './SEO';
-
-const knownStaticPaths = new Set([
-  '/',
-  '/pdf-merge',
-  '/pdf-split',
-  '/pdf-extract-pages',
-  '/pdf-delete-pages',
-  '/pdf-rotate',
-  '/jpg-to-pdf',
-  '/pdf-to-jpg',
-  '/about',
-  '/privacy',
-  '/terms',
-  '/contact',
-  '/editorial-policy',
-  '/blog'
-]);
+import { getLanguageSwitchPath, isEnglishPath, normalizePathname } from '../lib/pathname';
 
 const Header: React.FC = () => {
   const location = useLocation();
-  const pathname = location.pathname;
-  const isEn = pathname.startsWith('/en');
+  const pathname = normalizePathname(location.pathname);
+  const isEn = isEnglishPath(pathname);
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
@@ -36,33 +19,7 @@ const Header: React.FC = () => {
     setConvertOpen(false);
   };
 
-  // Calculate target route for language switching
-  const getSwitchLangRoute = () => {
-    const languageNeutralPath = pathname.startsWith('/en') ? pathname.substring(3) || '/' : pathname;
-    const blogSlug = languageNeutralPath.startsWith('/blog/') ? languageNeutralPath.substring(6) : '';
-    const isKnownPath = knownStaticPaths.has(languageNeutralPath) || Boolean(blogSlug && slugMap[blogSlug]);
-
-    if (!isKnownPath) {
-      return isEn ? '/' : '/en';
-    }
-
-    if (pathname.startsWith('/en/blog/')) {
-      const enSlug = pathname.substring(9);
-      const koSlug = slugMap[enSlug] || enSlug;
-      return `/blog/${koSlug}`;
-    } else if (pathname.startsWith('/blog/')) {
-      const koSlug = pathname.substring(6);
-      const enSlug = slugMap[koSlug] || koSlug;
-      return `/en/blog/${enSlug}`;
-    } else if (pathname.startsWith('/en')) {
-      const cleanPath = pathname.substring(3) || '/';
-      return cleanPath;
-    } else {
-      return `/en${pathname === '/' ? '' : pathname}`;
-    }
-  };
-
-  const switchRoute = getSwitchLangRoute();
+  const switchRoute = getLanguageSwitchPath(pathname);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur">

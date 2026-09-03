@@ -1,3 +1,5 @@
+import { normalizePathname } from '../lib/pathname.ts';
+
 export interface ToolGuideContent {
   heading: string;
   overview: string[];
@@ -255,7 +257,7 @@ export const toolGuides: Record<string, LocalizedGuide> = {
 };
 
 export const getToolGuide = (pathname: string, isEn: boolean): ToolGuideContent | undefined => {
-  const normalizedPath = pathname.replace(/^\/en/, '') || '/';
+  const normalizedPath = normalizePathname(pathname).replace(/^\/en(?=\/|$)/, '') || '/';
   const guide = toolGuides[normalizedPath];
   return guide?.[isEn ? 'en' : 'ko'];
 };

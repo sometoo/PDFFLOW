@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 import JSZip from 'jszip';
 import DocLayout from '../../components/DocLayout';
+import { copyPdfArrayBuffer, loadPdfForEditing, inspectPdf, ProtectedPdfError } from '../../lib/pdf';
 
 interface SplitFile {
   file: File;
@@ -37,19 +38,18 @@ const SplitPdf: React.FC = () => {
     setProcessing(true);
     try {
       const buffer = await selectedFile.arrayBuffer();
-      const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
-      const pageCount = pdfDoc.getPageCount();
+      const inspected = await inspectPdf(buffer);
 
       setFile({
         file: selectedFile,
         name: selectedFile.name,
         size: selectedFile.size,
-        pageCount,
-        buffer
+        pageCount: inspected.pageCount,
+        buffer: copyPdfArrayBuffer(inspected.bytes)
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      if (err.message && (err.message.includes('encrypted') || err.message.includes('password'))) {
+      if (err instanceof ProtectedPdfError) {
         alert(isEn 
           ? 'This PDF file is protected and cannot be loaded. Please upload a document that is not protected.' 
           : '이 PDF 파일은 비밀번호로 보호되어 있어 로드할 수 없습니다. 암호가 걸려 있지 않은 문서를 업로드해 주십시오.');
@@ -88,7 +88,7 @@ const SplitPdf: React.FC = () => {
 
     setProcessing(true);
     try {
-      const srcDoc = await PDFDocument.load(file.buffer);
+      const srcDoc = await loadPdfForEditing(file.buffer);
       const baseName = file.name.replace(/\.[^/.]+$/, "");
 
       if (splitMode === 'all') {
@@ -207,7 +207,7 @@ const SplitPdf: React.FC = () => {
   };
 
   const downloadFile = (data: Blob | Uint8Array, filename: string, contentType: string) => {
-    const blob = data instanceof Blob ? data : new Blob([data as any], { type: contentType });
+    const blob = data instanceof Blob ? data : new Blob([copyPdfArrayBuffer(data)], { type: contentType });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;

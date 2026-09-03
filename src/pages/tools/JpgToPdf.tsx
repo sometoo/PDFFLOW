@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { PDFDocument } from 'pdf-lib';
 import DocLayout from '../../components/DocLayout';
+import { copyPdfArrayBuffer } from '../../lib/pdf';
 
 interface ImageFile {
   id: string;
@@ -118,7 +119,7 @@ const JpgToPdf: React.FC = () => {
       }
 
       const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
+      const blob = new Blob([copyPdfArrayBuffer(pdfBytes)], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
