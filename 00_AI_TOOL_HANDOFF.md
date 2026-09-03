@@ -1,17 +1,77 @@
 ---
 schema_version: "1.0"
 protocol_version: "v1.0.0"
-last_updated_at: "2026-09-03T15:27:24+09:00"
+last_updated_at: "2026-09-03T17:16:11+09:00"
 last_updated_by: "CODEX"
-base_commit: "0cf20c6a55edb29aa98704b60592ffad7d18a8ea"
-previous_tool: "UNKNOWN"
-previous_change_status: "DIAGNOSED_NOT_FIXED"
-compatibility_status: "PARTIAL"
-verification_status: "FAILED"
-next_action: "회장이 수정 범위를 승인하면 정상 PDF-to-JPG, 암호 PDF 계약, trailing slash 및 언어 전환 회귀 테스트부터 추가하고 최소 수정한다."
+base_commit: "2e2cc4b7e0f20a8562ddcdf533c6a7585eea8153"
+previous_tool: "CODEX"
+previous_change_status: "COMPLETED_AND_VERIFIED_LOCALLY"
+compatibility_status: "PASSED"
+verification_status: "PASSED_LOCAL_ONLY"
+next_action: "회장이 원격 push와 운영 배포를 별도로 승인하면 현재 HEAD를 배포하고 운영 PDF-to-JPG·암호 PDF 거절·언어 전환·다운로드를 재검증한다."
 ---
 
 # Codex·Claude Code·Hermes 공용 인계 현황
+
+## 2026-09-03 핵심 기능 수정 및 로컬 검증
+
+### 작업 레코드
+
+| 필드 | 값 |
+|---|---|
+| task_id | PDFSITE-FIX-20260903 |
+| requested_by | 회장 |
+| objective | 확정된 PDF 처리·경로·hydration 결함을 최소 수정하고 회귀 방지 |
+| scope | 암호 PDF 선택 거절, PDF→JPG 버퍼, 경로 정규화, JSON-LD hydration, 병합 큐 경쟁, 테스트·lint |
+| executor | CODEX + implementation_engineer + 독립 quality_test_director |
+| base_commit | `2e2cc4b7e0f20a8562ddcdf533c6a7585eea8153` |
+| source_version | `68cf597ec99ae097ddd0dca6760cb5e4a9452767` |
+| deployed_version | 기존 운영본 `0cf20c6` 계열 — 이번 변경 미배포 |
+| completed_at | 2026-09-03T17:16:11+09:00 |
+| cost | `null` / `UNAVAILABLE` |
+| result | 로컬 구현 및 검증 완료, 운영 반영은 승인 대기 |
+
+### 구현 결과
+
+- `src/lib/pdf.ts`에 PDF.js 전송용 독립 바이트 복사, 암호 PDF 판별, 편집용 strict load 계약을 추가했다. 큰 PDF의 불필요한 이중 복사와 편집 단계 이중 파싱은 독립 리뷰 후 제거했다.
+- Split·Rotate·Extract·Delete·Merge는 암호 PDF를 작업 화면 또는 병합 대기열에 넣기 전에 기존 한·영 안내로 거절한다. 실제 비밀번호 입력·복호화·암호 제거 기능은 이번 범위에 넣지 않았다.
+- PDF→JPG는 최초 PDF.js 분석이 복사본 버퍼를 가져가도 원본 상태 버퍼를 보존해 변환 단계에서 `detached ArrayBuffer`가 발생하지 않는다.
+- `src/lib/pathname.ts`로 끝의 `/`를 정규화해 Cloudflare의 `/pdf-split/`에서도 상세 가이드, 언어 전환, canonical·alternate·구조화 URL을 같은 경로로 계산한다.
+- React 19 hydration 불일치의 별도 원인이던 JSON-LD 이동을 고쳤다. JSON-LD는 prerender 결과의 React root 안에 정확히 1개 남고 head에는 중복하지 않는다.
+- 병합 파일 검증 중과 실제 병합 중에는 추가·삭제·재정렬·전체 삭제·중복 병합을 동기 ref와 UI disabled로 막는다. 잠금 중 드롭도 기본 브라우저 PDF 열기로 빠지지 않도록 handler가 항상 `preventDefault()`를 실행한다.
+- 테스트 스크립트와 14개 회귀 테스트를 추가했고 기존 lint 17건을 행동 변경 없이 정리했다.
+
+### 커밋
+
+- `68746a9` — PDF 검사·버퍼 복사·경로 정규화·테스트·lint 정리
+- `cfc3493` — JSON-LD prerender hydration 계약 수정
+- `5f83839` — 병합 선택 순서·검증 직렬화·PDF 복사/파싱 최소화·실행형 테스트 보강
+- `19819db` — 병합 큐 상호작용 잠금과 drop 기본동작 방지
+- `68cf597` — 잠금 중에도 drop handler가 이벤트를 받도록 CSS hit-testing 보정
+
+### 최종 검증
+
+- `npm test`: 14/14 통과, 실패·취소·건너뜀 0. Node의 `--experimental-strip-types` 안내는 남지만 테스트 exit 0이다.
+- `npm run lint`: 오류 0, exit 0.
+- `npm run build`: TypeScript와 Vite 빌드 통과, 40개 공개 경로와 404 prerender 완료, exit 0. 약 500 kB 초과 chunk 경고는 남는다.
+- JSON-LD 계약: PDF 분할·PDF→JPG와 영문 대응 경로에서 `total=1`, `root=1`, `head=0`을 확인했다.
+- 최신 로컬 production preview `/pdf-to-jpg/`: 첫 로드 콘솔 error/warn 0, 합성 2페이지 정상 PDF 변환 성공 알림, 변환 후 콘솔 error/warn 0.
+- 최신 로컬 production preview `/pdf-merge/`: 상세 가이드와 `/en/pdf-merge` 링크 표시, 합성 암호 PDF 즉시 거절 후 대기열 미등록.
+- 독립 코드 리뷰는 세 번의 보완 라운드 뒤 Critical 0, Important 0, `Ready: Yes`로 종료했다.
+- `git diff --check`와 최종 작업 트리 상태는 이 인계 커밋 직전에 다시 확인한다.
+
+### 미검증·승인 대기·범위 밖
+
+- 원격 push, Cloudflare 운영 배포, 운영 URL 재검증은 하지 않았다. `source_version != deployed_version`이므로 운영 사이트가 고쳐졌다고 보고하면 안 된다.
+- 인앱 브라우저는 Blob 다운로드 이벤트를 포착하지 못해 실제 결과 파일 다운로드와 열기까지는 확정하지 않았다. 일반 Chrome·Edge·Firefox·Safari/iOS 다운로드 대조가 남아 있다.
+- 최신 로컬 브라우저에서 Rotate·Extract·Delete의 실제 암호 PDF 거절을 각각 반복하지 않았고, 자동 테스트와 동일 공통 helper 사용·빌드로만 확인했다.
+- 다운로드 URL 해제 시점, AdSense·CSP·개인정보 고지, 파일·페이지·픽셀 상한, WebP/GIF 거절, 삭제 입력 `,` 검증, 키보드 접근성은 이번 승인 범위 밖이라 변경하지 않았다.
+- 자동 결제·외부 발송·권한 변경·데이터 삭제는 0회다.
+
+### 롤백
+
+- 운영 배포 전이므로 운영 롤백은 필요 없다.
+- 로컬 수정은 위 5개 기능 커밋을 역순으로 `git revert`하면 복원할 수 있으며, 진단 기록 커밋 `2e2cc4b`는 별도로 유지할 수 있다.
 
 ## 2026-09-03 운영 사이트 기능 진단
 
@@ -80,5 +140,5 @@ next_action: "회장이 수정 범위를 승인하면 정상 PDF-to-JPG, 암호 
 ## 다음 도구가 가장 먼저 할 일
 
 1. `git status --short --branch`, 최근 커밋, 이 문서와 diff를 확인한다.
-2. 회장이 아직 수정 범위를 승인하지 않았다면 진단 상태를 보존하고 코드를 편집하지 않는다.
-3. 승인되면 `PdfToJpg.tsx` 정상 입력 실패, 암호 PDF 업로드/실행 계약, `/pdf-split/` 경로와 언어 전환을 먼저 실패 테스트로 고정한다.
+2. 현재 HEAD의 로컬 검증은 완료됐지만 운영은 미배포이므로 배포 승인 기록을 먼저 확인한다.
+3. 배포 승인이 있으면 push·배포 대상과 롤백 지점을 다시 설명한 뒤 실행하고, 운영 URL에서 PDF→JPG·암호 PDF 거절·언어 전환·hydration 콘솔·실제 다운로드를 확인한다.
