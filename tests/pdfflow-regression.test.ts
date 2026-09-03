@@ -73,3 +73,9 @@ test('SSR keeps the detailed guide and localized link on a trailing-slash route'
     await vite.close();
   }
 });
+
+test('prerender preserves JSON-LD in the React root DOM contract', async () => {
+  const source = await readFile(new URL('../scripts/prerender.mjs', import.meta.url), 'utf8');
+
+  assert.doesNotMatch(source, /const metadataPattern = [^\n]*application\\\/ld\\\+json/);
+});

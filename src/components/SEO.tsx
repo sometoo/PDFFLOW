@@ -45,7 +45,8 @@ const SEO: React.FC<SEOProps> = ({ title, description, canonical, noindex, struc
   }
 
   return (
-    <Helmet>
+    <>
+      <Helmet>
       <title>{title}</title>
       <meta name="description" content={description} />
       {noindex ? (
@@ -71,12 +72,13 @@ const SEO: React.FC<SEOProps> = ({ title, description, canonical, noindex, struc
       {!noindex && <link rel="alternate" hrefLang="ko" href={koUrl} />}
       {!noindex && <link rel="alternate" hrefLang="en" href={enUrl} />}
       {!noindex && <link rel="alternate" hrefLang="x-default" href={koUrl} />}
+      </Helmet>
       {structuredData && (
         <script type="application/ld+json">
           {JSON.stringify(structuredData)}
         </script>
       )}
-    </Helmet>
+    </>
   );
 };
 

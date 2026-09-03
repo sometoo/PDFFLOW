@@ -21,7 +21,7 @@ try {
     .replace(/\s*<meta\s+(?:name|property)="(?:description|robots|og:[^"]+|twitter:[^"]+)"[^>]*>/gi, '');
 
   const buildDocument = (route, rendered) => {
-    const metadataPattern = /<title>[\s\S]*?<\/title>|<meta\s+[^>]*\/>|<link\s+[^>]*\/>|<script\s+type="application\/ld\+json">[\s\S]*?<\/script>/gi;
+    const metadataPattern = /<title>[\s\S]*?<\/title>|<meta\s+[^>]*\/>|<link\s+[^>]*\/>/gi;
     const renderedMetadata = [...rendered.html.matchAll(metadataPattern)].map((match) => match[0]).join('\n');
     const headHtml = rendered.head.trim() || renderedMetadata;
     const bodyHtml = rendered.html.replace(metadataPattern, '');
