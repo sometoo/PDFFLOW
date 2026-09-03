@@ -228,7 +228,7 @@ const MergePdf: React.FC = () => {
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           className={`relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 text-center transition cursor-pointer ${
-            queueLocked ? 'pointer-events-none opacity-60' : ''
+            queueLocked ? 'opacity-60' : ''
           } ${
             isDragOver ? 'border-violet-500 bg-violet-50/50' : 'border-slate-300 hover:border-violet-500 hover:bg-slate-50'
           }`}

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 import { PDFDocument } from 'pdf-lib';
 
@@ -73,4 +74,11 @@ test('merge queue locks every mutation while adding or processing', async () => 
     assert.equal(allowed, !state.locked);
     assert.equal(preventDefaultCalls, 1);
   }
+});
+
+test('outer merge drop zone keeps pointer events while showing the queue lock opacity', async () => {
+  const source = await readFile(new URL('../src/pages/tools/MergePdf.tsx', import.meta.url), 'utf8');
+
+  assert.doesNotMatch(source, /queueLocked \? 'pointer-events-none opacity-60'/);
+  assert.match(source, /queueLocked \? 'opacity-60'/);
 });
