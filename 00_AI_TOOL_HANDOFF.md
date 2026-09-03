@@ -1,17 +1,78 @@
 ---
 schema_version: "1.0"
 protocol_version: "v1.0.0"
-last_updated_at: "2026-09-03T17:16:11+09:00"
+last_updated_at: "2026-09-03T17:54:29+09:00"
 last_updated_by: "CODEX"
-base_commit: "2e2cc4b7e0f20a8562ddcdf533c6a7585eea8153"
+base_commit: "989e530f47b4614875fb6324901bc624db9651cc"
 previous_tool: "CODEX"
-previous_change_status: "COMPLETED_AND_VERIFIED_LOCALLY"
+previous_change_status: "DEPLOYED_AND_VERIFIED"
 compatibility_status: "PASSED"
-verification_status: "PASSED_LOCAL_ONLY"
-next_action: "회장이 원격 push와 운영 배포를 별도로 승인하면 현재 HEAD를 배포하고 운영 PDF-to-JPG·암호 PDF 거절·언어 전환·다운로드를 재검증한다."
+verification_status: "PASSED"
+next_action: "검증된 운영 핵심 경로는 사용 가능하다. 남은 브라우저 호환성·CSP·입력 제한·실제 암호해제는 별도 승인 범위로 관리한다."
 ---
 
 # Codex·Claude Code·Hermes 공용 인계 현황
+
+## 2026-09-03 운영 배포 및 사후 검증
+
+### 작업 레코드
+
+| 필드 | 값 |
+|---|---|
+| task_id | PDFSITE-DEPLOY-20260903 |
+| requested_by | 회장 — 이 Codex 대화에서 `배포승인한다` 명시 |
+| objective | 검증된 PDFFlow 수정본을 원격 main과 Cloudflare Pages 운영본에 반영하고 핵심 흐름 확인 |
+| executor | CODEX + operations_release_director + 독립 quality_test_director |
+| deployed_code_version | `989e530f47b4614875fb6324901bc624db9651cc` |
+| deployed_asset | `/assets/index-NflD4wI3.js` |
+| deployed_asset_sha256 | `EED2CF577103DBB05462E85AF92265A947A75527FAB3BD06542BEE17D7A7D886` |
+| completed_at | 2026-09-03T17:54:29+09:00 |
+| cost | `null` / `UNAVAILABLE` |
+| result | 완료 및 검증됨 — 독립 사후검수 Pass |
+
+### 배포 실행
+
+- 배포 전 `npm test` 14/14, `npm run lint` 오류 0, `npm run build` exit 0·40개 경로 prerender, `git diff --check` exit 0을 새로 확인했다.
+- `git fetch --prune origin` 후 `origin/main...HEAD`가 `0 7`, `origin/main`이 HEAD의 조상임을 확인했다. 다른 원격 변경을 덮는 force push는 사용하지 않았다.
+- `git push --porcelain origin 989e530f47b4614875fb6324901bc624db9651cc:refs/heads/main`이 `0cf20c6..989e530`으로 성공했다.
+- push 후 로컬 HEAD와 `origin/main`이 모두 `989e530f47b4614875fb6324901bc624db9651cc`로 일치했다.
+- 저장소에는 Wrangler 직접 배포 설정이 없고 README의 `main` 생산 브랜치·`npm run build`·`dist` 설정에 따라 Cloudflare Pages Git 연동 자동 배포 경로를 사용했다.
+- fetch에서 `origin/cloudflare/workers-autoconfig`, `origin/cloudflare/workers-autoconfig-2` 원격 브랜치를 발견했지만 이번 Pages 배포와 합치거나 수정하지 않았다.
+
+### 운영 정적 증거
+
+- 운영 홈이 새 `/assets/index-NflD4wI3.js`를 제공하며 그 SHA-256이 최종 로컬 `dist` 파일과 일치했다. 이는 확인한 대표 메인 JS 번들의 원본·운영 일치 증거다.
+- 홈·병합·분할·영문 병합·`robots.txt`·`sitemap.xml`은 HTTP 200, 임의 미존재 경로는 HTTP 404였다.
+- 운영 `/pdf-split/` 서버 HTML은 JSON-LD `total=1`, React `#root` 안 `1`, head `0`이고 상세 가이드·`/en/pdf-split`·canonical·structured URL을 확인했다.
+- 운영 `/en/pdf-merge/`는 영문 가이드와 한국어 복귀 링크 `/pdf-merge`를 제공했다.
+
+### 운영 동적 증거
+
+- 새 운영 탭 `/pdf-to-jpg/`의 최초 콘솔 error/warn은 0이었다.
+- 합성 2쪽 정상 PDF를 업로드해 `성공적으로 변환되었습니다!` 알림을 확인했고, Windows 다운로드 폴더에 `live-normal-two-pages_images.zip` 24,598 bytes가 실제 생성됐다.
+- ZIP 안 `page-1.jpg`, `page-2.jpg`는 각각 12,192 bytes였고 두 파일 모두 JPEG magic `FF D8`을 확인했다.
+- 새 운영 `/pdf-merge/` 탭의 최초 콘솔 error/warn은 0이었다. 합성 암호 PDF는 즉시 한국어 거절 안내를 표시했고 대기열에 들어가지 않았다.
+- 새 운영 `/en/pdf-merge/` 탭은 상세 가이드와 `/pdf-merge` 복귀 링크를 표시했으며 최초 콘솔 error/warn은 0이었다.
+- 인앱 브라우저의 download 이벤트 API는 URL을 해제하지 않는 최소 Blob 다운로드도 포착하지 못했다. 제품 실패가 아닌 계측 한계로 분리했고, 실제 OS ZIP과 내부 JPG를 직접 검증해 다운로드 성공을 확인했다.
+
+### 정리·독립검수
+
+- 합성 PDF 2개와 다운로드 ZIP은 정확한 경로·이름·크기를 확인한 뒤 삭제했다. 사용자 원본 PDF나 기존 다운로드 파일은 삭제하지 않았다.
+- 독립 quality_test_director는 운영 메인 번들 해시, HTTP 상태, JSON-LD·가이드·언어 링크를 다시 읽기 전용 확인했다.
+- 최종 판정은 `Pass — 완료 및 검증됨(검증 범위 내)`, Critical 0, Important 0, 검증된 운영 핵심 경로 사용 가능이다.
+
+### 잔여 경계
+
+- 전체 배포 파일이 아니라 대표 메인 JS 번들의 원본·운영 해시를 비교했다.
+- 정상 PDF 병합 결과, Split·Rotate·Extract·Delete의 전체 운영 결과 파일, Chrome·Edge·Firefox·Safari/iOS 전체 매트릭스는 이번 사후검증 범위가 아니다.
+- 실제 비밀번호 해제, 다운로드 URL 해제 시점 변경, AdSense·CSP·개인정보 고지, 입력 크기·페이지·픽셀 상한은 별도 작업으로 남아 있다.
+- Cloudflare Dashboard의 배포 행·빌드 Node 버전은 직접 확인하지 못했지만, 공개 운영 URL의 새 번들·해시·동적 기능으로 실제 배포 반영을 확인했다.
+- 자동 결제·외부 발송·권한 변경은 0회다.
+
+### 롤백
+
+- Cloudflare 배포 이력에서 직전 `0cf20c6` 계열 성공 배포를 복원하는 것이 가장 빠른 운영 롤백이다.
+- Git 전진 롤백이 필요하면 기능 커밋 `68cf597`, `19819db`, `5f83839`, `cfc3493`, `68746a9`를 역순으로 revert하고 test·lint·build 후 main에 push한다. 진단·인계 기록은 유지한다.
 
 ## 2026-09-03 핵심 기능 수정 및 로컬 검증
 
@@ -140,5 +201,5 @@ next_action: "회장이 원격 push와 운영 배포를 별도로 승인하면 �
 ## 다음 도구가 가장 먼저 할 일
 
 1. `git status --short --branch`, 최근 커밋, 이 문서와 diff를 확인한다.
-2. 현재 HEAD의 로컬 검증은 완료됐지만 운영은 미배포이므로 배포 승인 기록을 먼저 확인한다.
-3. 배포 승인이 있으면 push·배포 대상과 롤백 지점을 다시 설명한 뒤 실행하고, 운영 URL에서 PDF→JPG·암호 PDF 거절·언어 전환·hydration 콘솔·실제 다운로드를 확인한다.
+2. 운영 핵심 경로는 배포·검증 완료 상태다. 같은 검사를 처음부터 반복하지 말고 새 요청과 잔여 경계만 확인한다.
+3. 추가 작업은 다운로드 브라우저 매트릭스, 보안·개인정보·입력 제한, 실제 암호해제 중 사용자가 승인한 범위만 별도 TDD로 진행한다.
