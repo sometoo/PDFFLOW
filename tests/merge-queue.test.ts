@@ -55,3 +55,22 @@ test('merge validation keeps normal files in order and rejects a protected file'
   assert.deepEqual(result.validFiles.map((file) => file.name), ['first.pdf', 'third.pdf']);
   assert.deepEqual(result.rejectedFiles.map((entry) => entry.file.name), ['protected.pdf']);
 });
+
+test('merge queue locks every mutation while adding or processing', async () => {
+  const { isMergeQueueLocked, prepareMergeDrop } = await import('../src/lib/mergeFiles.ts');
+  const states = [
+    { addingFiles: false, processing: false, locked: false },
+    { addingFiles: true, processing: false, locked: true },
+    { addingFiles: false, processing: true, locked: true },
+    { addingFiles: true, processing: true, locked: true }
+  ];
+
+  for (const state of states) {
+    let preventDefaultCalls = 0;
+    const allowed = prepareMergeDrop({ preventDefault: () => { preventDefaultCalls += 1; } }, state);
+
+    assert.equal(isMergeQueueLocked(state), state.locked);
+    assert.equal(allowed, !state.locked);
+    assert.equal(preventDefaultCalls, 1);
+  }
+});

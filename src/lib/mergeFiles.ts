@@ -9,6 +9,23 @@ export interface MergeFileEntry {
 
 export type MergeFileIdFactory = (index: number, file: File) => string;
 
+export interface MergeQueueState {
+  addingFiles: boolean;
+  processing: boolean;
+}
+
+export interface MergeDropEvent {
+  preventDefault: () => void;
+  defaultPrevented?: boolean;
+}
+
+export const isMergeQueueLocked = ({ addingFiles, processing }: MergeQueueState): boolean => addingFiles || processing;
+
+export const prepareMergeDrop = (event: MergeDropEvent, state: MergeQueueState): boolean => {
+  if (!event.defaultPrevented) event.preventDefault();
+  return !isMergeQueueLocked(state);
+};
+
 export interface MergeFileRejection {
   file: File;
   error: unknown;
