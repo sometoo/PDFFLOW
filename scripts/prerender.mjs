@@ -51,7 +51,7 @@ const prerender = async () => {
         return [
           '  <url>',
           `    <loc>${siteOrigin}${route === '/' ? '/' : route}</loc>`,
-          '    <lastmod>2026-07-20</lastmod>',
+          '    <lastmod>2026-09-09</lastmod>',
           `    <changefreq>${isBlog ? 'monthly' : isToolOrHome ? 'weekly' : 'yearly'}</changefreq>`,
           `    <priority>${route === '/' || route === '/en' ? '1.0' : isToolOrHome ? '0.9' : isBlog ? '0.7' : '0.4'}</priority>`,
           '  </url>'

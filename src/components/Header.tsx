@@ -10,6 +10,7 @@ const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [convertOpen, setConvertOpen] = useState(false);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
 
@@ -17,6 +18,7 @@ const Header: React.FC = () => {
     setMobileMenuOpen(false);
     setToolsOpen(false);
     setConvertOpen(false);
+    setPrivacyOpen(false);
   };
 
   const switchRoute = getLanguageSwitchPath(pathname);
@@ -91,6 +93,34 @@ const Header: React.FC = () => {
                 </Link>
                 <Link to={isEn ? "/en/pdf-to-jpg" : "/pdf-to-jpg"} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-violet-600" onClick={closeMenu}>
                   {isEn ? 'PDF to JPG' : 'PDF JPG 변환'}
+                </Link>
+                <Link to={isEn ? "/en/pdf-to-word" : "/pdf-to-word"} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-violet-600" onClick={closeMenu}>
+                  {isEn ? 'PDF to Word' : 'PDF Word 변환'}
+                </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Privacy Dropdown */}
+          <div
+            className="relative"
+            onMouseEnter={() => setPrivacyOpen(true)}
+            onMouseLeave={() => setPrivacyOpen(false)}
+          >
+            <button className="flex items-center gap-1 py-2 text-sm font-medium text-slate-700 hover:text-violet-600 transition">
+              {isEn ? 'Privacy' : '개인정보'}
+              <svg className={`h-4 w-4 transition-transform ${privacyOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {privacyOpen && (
+              <div className="absolute left-0 mt-0 w-48 rounded-md border border-slate-100 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
+                <Link to={isEn ? "/en/pdf-metadata-viewer" : "/pdf-metadata-viewer"} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-violet-600" onClick={closeMenu}>
+                  {isEn ? 'PDF Metadata Viewer' : 'PDF 메타데이터 확인'}
+                </Link>
+                <Link to={isEn ? "/en/pdf-remove-metadata" : "/pdf-remove-metadata"} className="block px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 hover:text-violet-600" onClick={closeMenu}>
+                  {isEn ? 'Remove PDF Metadata' : 'PDF 메타데이터 제거'}
                 </Link>
               </div>
             )}
@@ -172,6 +202,24 @@ const Header: React.FC = () => {
                 </Link>
                 <Link to={isEn ? "/en/pdf-to-jpg" : "/pdf-to-jpg"} className="block py-2 text-sm text-slate-700 hover:text-violet-600" onClick={closeMenu}>
                   {isEn ? 'PDF to JPG' : 'PDF JPG 변환'}
+                </Link>
+                <Link to={isEn ? "/en/pdf-to-word" : "/pdf-to-word"} className="block py-2 text-sm text-slate-700 hover:text-violet-600" onClick={closeMenu}>
+                  {isEn ? 'PDF to Word' : 'PDF Word 변환'}
+                </Link>
+              </div>
+            </div>
+
+            {/* Privacy Section */}
+            <div>
+              <div className="px-2 py-1 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                {isEn ? 'Privacy' : '개인정보'}
+              </div>
+              <div className="mt-1 flex flex-col gap-1 pl-2">
+                <Link to={isEn ? "/en/pdf-metadata-viewer" : "/pdf-metadata-viewer"} className="block py-2 text-sm text-slate-700 hover:text-violet-600" onClick={closeMenu}>
+                  {isEn ? 'PDF Metadata Viewer' : 'PDF 메타데이터 확인'}
+                </Link>
+                <Link to={isEn ? "/en/pdf-remove-metadata" : "/pdf-remove-metadata"} className="block py-2 text-sm text-slate-700 hover:text-violet-600" onClick={closeMenu}>
+                  {isEn ? 'Remove PDF Metadata' : 'PDF 메타데이터 제거'}
                 </Link>
               </div>
             </div>

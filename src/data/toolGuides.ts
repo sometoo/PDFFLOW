@@ -253,6 +253,108 @@ export const toolGuides: Record<string, LocalizedGuide> = {
       verifyTitle: 'Checks after download',
       verify: ['Inspect small text and thin lines', 'Confirm the selected page range', 'Check that images do not expose private information']
     }
+  },
+  '/pdf-metadata-viewer': {
+    ko: {
+      heading: 'PDF 문서 정보에는 무엇이 기록될까',
+      overview: [
+        'PDF는 페이지 내용 외에 문서 정보 레코드를 함께 가질 수 있습니다. 여기에는 제목, 작성자, 주제, 키워드, 생성·수정 날짜, 작성에 쓴 응용 프로그램, 파일을 만든 변환기 정보가 들어갑니다. 워드 프로세서나 스캐너 소프트웨어는 PDF를 저장할 때 사용자 이름이나 원본 파일 경로를 자동으로 기록하기도 합니다.',
+        '이 도구는 파일을 브라우저 메모리에서 직접 읽어 기록된 정보를 표로 보여줍니다. 값이 비어 있다면 해당 항목이 파일에 기록되지 않은 것이며, 확인 결과는 어디에도 전송되지 않습니다.'
+      ],
+      facts: [
+        { label: '입력', value: 'PDF 1개' },
+        { label: '출력', value: '표시 전용 (파일 변경 없음)' },
+        { label: '처리 위치', value: '현재 브라우저 메모리' }
+      ],
+      bestForTitle: '이럴 때 적합합니다',
+      bestFor: ['이력서나 계약서를 보내기 전에 숨은 정보를 점검할 때', '어떤 프로그램으로 만들어진 문서인지 확인할 때', '문서의 원래 작성·수정 시점을 확인할 때'],
+      verifyTitle: '확인 시 점검할 항목',
+      verify: ['작성자·응용 프로그램에 개인 식별 정보가 있는지 확인', '생성 날짜가 공개하기 적절한지 확인', '제거가 필요하면 메타데이터 제거 도구로 이어서 처리']
+    },
+    en: {
+      heading: 'What a PDF records about its own history',
+      overview: [
+        'A PDF can carry a document information record next to its page content: the title, author, subject, keywords, creation and modification dates, the application that produced it, and the converter or driver that wrote the file. Word processors and scanner software often record a user name or the original file path automatically when saving.',
+        'This tool reads the file directly in browser memory and shows the recorded values in a table. An empty value means the property was never written into the file, and the inspection result is not sent anywhere.'
+      ],
+      facts: [
+        { label: 'Input', value: 'One PDF' },
+        { label: 'Output', value: 'View only (file unchanged)' },
+        { label: 'Processing', value: 'Current browser memory' }
+      ],
+      bestForTitle: 'Good use cases',
+      bestFor: ['Checking hidden details before sending a resume or contract', 'Identifying which tool produced a document', 'Verifying the original creation and edit dates'],
+      verifyTitle: 'Checks while inspecting',
+      verify: ['Look for personal identifiers in author and application fields', 'Decide whether the creation date is safe to disclose', 'Continue with the Remove Metadata tool if cleaning is needed']
+    }
+  },
+  '/pdf-remove-metadata': {
+    ko: {
+      heading: '메타데이터 제거는 문서를 새로 구성하는 방식입니다',
+      overview: [
+        '이 도구는 원본 파일을 수정하는 대신 페이지 내용만 새 문서로 복사해 저장합니다. 새 문서에는 제목, 작성자, 주제, 키워드, 날짜, 작성 프로그램 같은 문서 정보가 담기지 않으므로, 뷰어의 문서 속성 창에서 해당 항목이 비어 있게 표시됩니다.',
+        '문서를 새로 구성하기 때문에 페이지 밖의 기능도 함께 초기화됩니다. 목차, 전자서명, 일부 양식 필드는 결과에 유지되지 않을 수 있으니, 서명·양식이 중요한 문서라면 정리 전에 원본을 보관하고 결과에서 기능이 필요한지 확인하세요. 페이지 안의 텍스트·이미지·링크는 그대로 복사됩니다.'
+      ],
+      facts: [
+        { label: '입력', value: 'PDF 1개' },
+        { label: '출력', value: '문서 정보 없는 새 PDF' },
+        { label: '재압축', value: '페이지 내용 재인코딩 없음' }
+      ],
+      bestForTitle: '이럴 때 적합합니다',
+      bestFor: ['재직증명서·계약서 등을 외부에 보내기 전 정리할 때', '스캔기가 남긴 작성자·프로그램 정보를 지울 때', '웹 게시용 문서를 최소 정보만 남겨 저장할 때'],
+      verifyTitle: '다운로드 후 확인할 항목',
+      verify: ['문서 속성 창에서 제목·작성자가 비었는지 확인', '페이지 수와 내용이 원본과 같은지 확인', '목차·양식이 필요한 문서라면 대안 검토']
+    },
+    en: {
+      heading: 'Metadata removal rebuilds the document',
+      overview: [
+        'Instead of editing the original file, this tool copies only the page contents into a new document and saves that. The result carries no title, author, subject, keywords, dates, or producer record, so those fields appear empty in a viewer\'s document properties panel.',
+        'Because the document is rebuilt, features that live outside the pages are reset too. Bookmarks, digital signatures, and some form field definitions may not survive, so keep the original and verify the result when signatures or forms matter. Text, images, and links inside the pages are copied as-is.'
+      ],
+      facts: [
+        { label: 'Input', value: 'One PDF' },
+        { label: 'Output', value: 'A new PDF without document info' },
+        { label: 'Re-compression', value: 'Page content is not re-encoded' }
+      ],
+      bestForTitle: 'Good use cases',
+      bestFor: ['Cleaning certificates or contracts before sending them out', 'Removing scanner-recorded author and software names', 'Publishing documents with only minimal technical values'],
+      verifyTitle: 'Checks after download',
+      verify: ['Confirm title and author are empty in document properties', 'Compare page count and content with the original', 'Review alternatives if outlines or forms are required']
+    }
+  },
+  '/pdf-to-word': {
+    ko: {
+      heading: '텍스트 PDF가 편집 가능한 Word로 바뀌는 과정',
+      overview: [
+        '텍스트 기반 PDF는 글자가 그림이 아니라 실제 텍스트로 저장되어 있습니다. 이 도구는 브라우저에서 각 페이지의 텍스트와 좌표를 읽고, 세로 위치로 줄을 묶고, 줄 간격이 커지는 지점에서 문단을 나눕니다. 그 결과를 Word 문서(DOCX) 형식으로 조립해 내려받습니다.',
+        '스캔 문서는 글자가 이미지로 저장되어 있어 추출할 텍스트가 없습니다. 도구가 텍스트가 거의 없는 파일을 감지하면 변환하지 않고 안내를 표시합니다. 또한 표·이미지·다단 레이아웃은 순차적 문단으로 단순화되므로, 복잡한 문서는 Word에서 정리가 필요합니다.'
+      ],
+      facts: [
+        { label: '지원 입력', value: '텍스트 기반 PDF' },
+        { label: '출력', value: 'DOCX (Word 2007 이상)' },
+        { label: '처리 위치', value: '현재 브라우저 메모리' }
+      ],
+      bestForTitle: '이럴 때 적합합니다',
+      bestFor: ['편집 권한이 없는 문서의 내용을 재활용할 때', '보고서 문단을 복사해 재구성할 때', 'OCR 없이 텍스트 위주 계약서·공문을 수정할 때'],
+      verifyTitle: '다운로드 후 확인할 항목',
+      verify: ['문단 나뉨과 줄바꿈이 원본과 일치하는지 확인', '표·다단 구간은 Word에서 수동 정리', '긴 문서는 일부 페이지 먼저 변환해 품질 점검']
+    },
+    en: {
+      heading: 'How a text PDF becomes an editable Word file',
+      overview: [
+        'In a text-based PDF the characters are stored as real text, not pictures. This tool reads each page\'s text and its coordinates in your browser, groups characters into lines by vertical position, and starts a new paragraph wherever line spacing grows. The result is assembled into a Word (DOCX) package and downloaded.',
+        'Scanned documents store letters as images, so there is no text to extract. When the tool finds almost no selectable text it refuses the conversion with a notice. Tables, images, and multi-column layouts are simplified into sequential paragraphs, so complex documents need touch-up in Word afterwards.'
+      ],
+      facts: [
+        { label: 'Supported input', value: 'Text-based PDFs' },
+        { label: 'Output', value: 'DOCX (Word 2007 and later)' },
+        { label: 'Processing', value: 'Current browser memory' }
+      ],
+      bestForTitle: 'Good use cases',
+      bestFor: ['Reusing content from a document you cannot edit', 'Rebuilding report paragraphs in Word', 'Correcting text-heavy contracts without OCR'],
+      verifyTitle: 'Checks after download',
+      verify: ['Compare paragraph breaks with the source pages', 'Rebuild tables and column layouts manually', 'Convert a few pages first on long documents']
+    }
   }
 };
 

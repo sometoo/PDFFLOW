@@ -17,6 +17,9 @@ import DeletePages from './pages/tools/DeletePages';
 import RotatePdf from './pages/tools/RotatePdf';
 import JpgToPdf from './pages/tools/JpgToPdf';
 import PdfToJpg from './pages/tools/PdfToJpg';
+import PdfMetadataViewer from './pages/tools/PdfMetadataViewer';
+import RemovePdfMetadata from './pages/tools/RemovePdfMetadata';
+import PdfToWord from './pages/tools/PdfToWord';
 
 export function AppRoutes() {
   return (
@@ -36,6 +39,9 @@ export function AppRoutes() {
             <Route path="/pdf-rotate" element={<RotatePdf />} />
             <Route path="/jpg-to-pdf" element={<JpgToPdf />} />
             <Route path="/pdf-to-jpg" element={<PdfToJpg />} />
+            <Route path="/pdf-metadata-viewer" element={<PdfMetadataViewer />} />
+            <Route path="/pdf-remove-metadata" element={<RemovePdfMetadata />} />
+            <Route path="/pdf-to-word" element={<PdfToWord />} />
             <Route path="/about" element={<About />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
@@ -53,6 +59,9 @@ export function AppRoutes() {
             <Route path="/en/pdf-rotate" element={<RotatePdf />} />
             <Route path="/en/jpg-to-pdf" element={<JpgToPdf />} />
             <Route path="/en/pdf-to-jpg" element={<PdfToJpg />} />
+            <Route path="/en/pdf-metadata-viewer" element={<PdfMetadataViewer />} />
+            <Route path="/en/pdf-remove-metadata" element={<RemovePdfMetadata />} />
+            <Route path="/en/pdf-to-word" element={<PdfToWord />} />
             <Route path="/en/about" element={<About />} />
             <Route path="/en/privacy" element={<Privacy />} />
             <Route path="/en/terms" element={<Terms />} />

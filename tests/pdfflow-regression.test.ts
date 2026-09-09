@@ -47,7 +47,7 @@ test('buildDocument preserves one JSON-LD script and SEO metadata in the root co
 
   try {
     const { prerenderRoutes, render } = await vite.ssrLoadModule('/src/entry-server.tsx');
-    assert.equal(prerenderRoutes.length, 40);
+    assert.equal(prerenderRoutes.length, 46);
 
     for (const [route, expected] of [
       ['/pdf-split/', {

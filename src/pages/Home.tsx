@@ -23,9 +23,9 @@ const Home: React.FC = () => {
       <SEO 
         title={isEn ? "Free PDF Tools - PDFFlow" : "무료 PDF 도구 모음 - PDFFlow"} 
         description={
-          isEn 
-            ? "Edit your PDF files safely in your browser without uploading them to a server. Merge, split, extract, delete, rotate, and convert PDF files with simple free tools."
-            : "파일 업로드 없이 브라우저에서 안전하게 PDF를 편집하세요. PDF 합치기, 분할, 페이지 추출, 삭제, 회전, JPG 변환까지 한 곳에서 처리합니다."
+          isEn
+            ? "Edit your PDF files safely in your browser without uploading them to a server. Merge, split, extract, delete, rotate, convert, and inspect PDF files with simple free tools."
+            : "파일 업로드 없이 브라우저에서 안전하게 PDF를 편집하세요. PDF 합치기, 분할, 페이지 추출, 삭제, 회전, 변환, 메타데이터 관리까지 한 곳에서 처리합니다."
         }
         structuredData={{
           '@context': 'https://schema.org',
@@ -51,11 +51,11 @@ const Home: React.FC = () => {
         </h1>
         <p className="mt-6 text-lg text-slate-600 leading-relaxed">
           {isEn ? (
-            "Edit your PDF files safely in your browser without uploading them to a server. Merge, split, extract, delete, rotate, and convert PDF files with simple free tools."
+            "Edit your PDF files safely in your browser without uploading them to a server. Merge, split, extract, delete, rotate, convert, and inspect PDF files with simple free tools."
           ) : (
             <>
               파일 업로드 없이 브라우저에서 안전하게 PDF를 편집하세요. <br className="hidden sm:inline" />
-              PDF 합치기, 분할, 페이지 추출, 삭제, 회전, JPG 변환까지 한 곳에서 간편하게 사용할 수 있습니다.
+              PDF 합치기, 분할, 페이지 추출, 삭제, 회전, 변환, 메타데이터 관리까지 한 곳에서 간편하게 사용할 수 있습니다.
             </>
           )}
         </p>
@@ -257,9 +257,45 @@ const Home: React.FC = () => {
               {isEn ? "PDF to JPG" : "PDF JPG 변환"}
             </h3>
             <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-              {isEn 
-                ? "Convert each PDF page into high-resolution JPG images and export as a ZIP." 
+              {isEn
+                ? "Convert each PDF page into high-resolution JPG images and export as a ZIP."
                 : "PDF 각 페이지를 고화질 이미지(JPG) 파일로 렌더링하고 압축파일(ZIP) 형식으로 추출해냅니다."}
+            </p>
+          </Link>
+
+          <Link to={isEn ? "/en/pdf-to-word" : "/pdf-to-word"} className="group rounded-2xl border border-slate-200 bg-white p-6 hover:border-violet-500 hover:shadow-md transition">
+            <div className="text-3xl mb-4">📝</div>
+            <h3 className="text-lg font-bold text-slate-900 group-hover:text-violet-600 transition">
+              {isEn ? "PDF to Word" : "PDF Word 변환"}
+            </h3>
+            <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+              {isEn
+                ? "Turn a text-based PDF into an editable DOCX document rebuilt in your browser."
+                : "텍스트 기반 PDF를 브라우저에서 문단 구조를 살려 편집 가능한 DOCX 문서로 바꿉니다."}
+            </p>
+          </Link>
+
+          <Link to={isEn ? "/en/pdf-metadata-viewer" : "/pdf-metadata-viewer"} className="group rounded-2xl border border-slate-200 bg-white p-6 hover:border-violet-500 hover:shadow-md transition">
+            <div className="text-3xl mb-4">🔍</div>
+            <h3 className="text-lg font-bold text-slate-900 group-hover:text-violet-600 transition">
+              {isEn ? "PDF Metadata Viewer" : "PDF 메타데이터 확인"}
+            </h3>
+            <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+              {isEn
+                ? "Inspect the title, author, dates, and producer information recorded inside a PDF."
+                : "PDF에 기록된 제목, 작성자, 생성 날짜 등 문서 정보를 공유 전에 확인합니다."}
+            </p>
+          </Link>
+
+          <Link to={isEn ? "/en/pdf-remove-metadata" : "/pdf-remove-metadata"} className="group rounded-2xl border border-slate-200 bg-white p-6 hover:border-violet-500 hover:shadow-md transition">
+            <div className="text-3xl mb-4">🧹</div>
+            <h3 className="text-lg font-bold text-slate-900 group-hover:text-violet-600 transition">
+              {isEn ? "Remove PDF Metadata" : "PDF 메타데이터 제거"}
+            </h3>
+            <p className="mt-2 text-sm text-slate-600 leading-relaxed">
+              {isEn
+                ? "Rebuild the PDF without document properties and download a cleaned copy."
+                : "문서 정보 없이 새로 구성한 깨끗한 PDF 사본을 바로 내려받습니다."}
             </p>
           </Link>
 

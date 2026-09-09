@@ -3,23 +3,8 @@ import { useLocation } from 'react-router-dom';
 import JSZip from 'jszip';
 import DocLayout from '../../components/DocLayout';
 import type { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
+import { loadPdfJs } from '../../lib/pdfjs';
 import { copyPdfArrayBuffer, copyPdfData } from '../../lib/pdf';
-
-let pdfJsPromise: Promise<typeof import('pdfjs-dist')> | undefined;
-
-const loadPdfJs = () => {
-  if (!pdfJsPromise) {
-    pdfJsPromise = Promise.all([
-      import('pdfjs-dist'),
-      import('pdfjs-dist/build/pdf.worker.min.mjs?url')
-    ]).then(([pdfjs, workerModule]) => {
-      pdfjs.GlobalWorkerOptions.workerSrc = workerModule.default;
-      return pdfjs;
-    });
-  }
-
-  return pdfJsPromise;
-};
 
 interface PdfFile {
   file: File;

@@ -41,13 +41,60 @@ export const inspectPdf = async (data: PdfData): Promise<PdfInspection> => {
   };
 };
 
-export const loadPdfForEditing = async (data: PdfData): Promise<PDFDocument> => {
+export const loadPdfForEditing = async (
+  data: PdfData,
+  options: { updateMetadata?: boolean } = {}
+): Promise<PDFDocument> => {
   try {
-    return await PDFDocument.load(data);
+    return await PDFDocument.load(data, { updateMetadata: options.updateMetadata ?? true });
   } catch (error) {
     if (error instanceof ProtectedPdfError || isEncryptedPdfError(error)) {
       throw new ProtectedPdfError();
     }
     throw error;
   }
+};
+
+export interface PdfMetadataView {
+  title: string;
+  author: string;
+  subject: string;
+  keywords: string;
+  creator: string;
+  producer: string;
+  creationDate: Date | null;
+  modificationDate: Date | null;
+}
+
+const presentText = (value: unknown): string => (
+  typeof value === 'string' && value.trim().length > 0 ? value : ''
+);
+
+export const readPdfMetadata = async (data: PdfData): Promise<PdfMetadataView> => {
+  // pdf-lib's load() rewrites Producer and ModificationDate by default, so the
+  // record must be read with updateMetadata disabled to report the real file.
+  const pdfDocument = await loadPdfForEditing(data, { updateMetadata: false });
+
+  return {
+    title: presentText(pdfDocument.getTitle()),
+    author: presentText(pdfDocument.getAuthor()),
+    subject: presentText(pdfDocument.getSubject()),
+    keywords: presentText(pdfDocument.getKeywords()),
+    creator: presentText(pdfDocument.getCreator()),
+    producer: presentText(pdfDocument.getProducer()),
+    creationDate: pdfDocument.getCreationDate() ?? null,
+    modificationDate: pdfDocument.getModificationDate() ?? null
+  };
+};
+
+export const stripPdfMetadata = async (data: PdfData): Promise<Uint8Array> => {
+  const source = await loadPdfForEditing(data);
+  const clean = await PDFDocument.create();
+  clean.setProducer('');
+  clean.setCreator('');
+
+  const pages = await clean.copyPages(source, source.getPageIndices());
+  pages.forEach((page) => clean.addPage(page));
+
+  return clean.save();
 };
